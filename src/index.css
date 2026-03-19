@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
 
 @theme {
   --color-slate-850: #172033;
@@ -101,10 +100,6 @@ body {
 .leaflet-container {
   background: #0a0f1a !important;
   border-radius: 16px;
-}
-
-.leaflet-tile-pane .base-tiles {
-  filter: brightness(0.6) saturate(0.6) hue-rotate(200deg);
 }
 
 .leaflet-control-zoom a {
