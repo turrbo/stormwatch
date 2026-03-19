@@ -51,10 +51,8 @@ export default function Header({
     <header className="sticky top-0 z-50 glass-panel border-b border-slate-700/50 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center gap-3">
         <div className="flex items-center gap-2 shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-            <CloudRainIcon />
-          </div>
-          <h1 className="text-lg font-semibold text-white hidden sm:block">StormWatch</h1>
+          <img src="./logo.png" alt="Command Center" className="w-8 h-8 rounded-lg object-cover" />
+          <h1 className="text-lg font-semibold text-white hidden sm:block">Command Center</h1>
         </div>
 
         <div className="relative flex-1 max-w-md" ref={dropdownRef}>
@@ -158,11 +156,3 @@ export default function Header({
   );
 }
 
-function CloudRainIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
-      <path d="M16 14v6" /><path d="M8 14v6" /><path d="M12 16v6" />
-    </svg>
-  );
-}
