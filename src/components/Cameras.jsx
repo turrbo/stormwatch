@@ -1,58 +1,69 @@
 import { useState } from 'react';
-import { Camera, Maximize2, Minimize2, MapPin } from 'lucide-react';
+import { Camera, Maximize2, Minimize2, MapPin, Train, Radio, Waves } from 'lucide-react';
 
 const CAMERAS = [
-  {
-    id: 'rnXIjl_Rzy4',
-    label: 'Times Square, NYC',
-    city: 'New York',
-    region: 'Northeast',
-  },
-  {
-    id: 'TMXXzJZiChc',
-    label: 'NYC Weather Cam',
-    city: 'New York',
-    region: 'Northeast',
-  },
-  {
-    id: 'rV_RZ_xKxHM',
-    label: 'NYC Skyline View',
-    city: 'New York',
-    region: 'Northeast',
-  },
-  {
-    id: 'EO_1LWqsCNE',
-    label: 'Venice Beach, LA',
-    city: 'Los Angeles',
-    region: 'West',
-  },
-  {
-    id: 'KCcNxl2ZppI',
-    label: 'Fremont St, Las Vegas',
-    city: 'Las Vegas',
-    region: 'West',
-  },
-  {
-    id: 'ZksWoEAhmTU',
-    label: 'St. George St, St. Augustine',
-    city: 'St. Augustine',
-    region: 'Southeast',
-  },
-  {
-    id: 'EFum1rGUdkk',
-    label: 'Top Webcams Worldwide',
-    city: 'Global',
-    region: 'Other',
-  },
-  {
-    id: 'Jgp4JDG-nsk',
-    label: 'USA City Tour (Vegas, NYC, Miami)',
-    city: 'Multi-City',
-    region: 'Other',
-  },
+  // --- NORTHEAST ---
+  { id: 'rnXIjl_Rzy4', label: 'Times Square 4K (EarthCam)', city: 'New York, NY', region: 'Northeast', type: 'city' },
+  { id: 'VGnFLdQW39A', label: '24/7 NYC Live Cam', city: 'New York, NY', region: 'Northeast', type: 'city' },
+  { id: '4qyZLflp-sI', label: 'Times Square: 1560 Broadway', city: 'New York, NY', region: 'Northeast', type: 'city' },
+  { id: 'rV_RZ_xKxHM', label: 'NYC Skyline from Queens', city: 'New York, NY', region: 'Northeast', type: 'city' },
+  { id: 'TMXXzJZiChc', label: 'NYC Weather Cam', city: 'New York, NY', region: 'Northeast', type: 'weather' },
+  { id: 'OgqbZLzEbQU', label: 'NYC Harbor, Brooklyn', city: 'New York, NY', region: 'Northeast', type: 'harbor' },
+  { id: 'SmO5qmzhMk0', label: 'Sandy Hook Bay / NYC Skyline', city: 'Highlands, NJ', region: 'Northeast', type: 'harbor' },
+  { id: 'Zz9hMrxl20I', label: 'Public Square, Watertown', city: 'Watertown, NY', region: 'Northeast', type: 'city' },
+  { id: 'JEtvLd4B-AY', label: 'News 12 NY/NJ/CT Live', city: 'Tri-State Area', region: 'Northeast', type: 'news' },
+  { id: 'sNi1KbGCJ3o', label: '6abc Philadelphia Live', city: 'Philadelphia, PA', region: 'Northeast', type: 'news' },
+  { id: 'Vi0JiFqB5dc', label: 'I-93 Traffic Cam, Londonderry', city: 'Londonderry, NH', region: 'Northeast', type: 'traffic' },
+  { id: 'AgrYGFuW13g', label: 'Railcam, New London', city: 'New London, CT', region: 'Northeast', type: 'rail' },
+  { id: 'Dv2XxhsWqWY', label: 'SoNo Tower Rail Cam', city: 'South Norwalk, CT', region: 'Northeast', type: 'rail' },
+  { id: 'lUMGsNe-R9Q', label: 'Johnstown Rail Cam', city: 'Johnstown, PA', region: 'Northeast', type: 'rail' },
+
+  // --- MID-ATLANTIC / DC ---
+  { id: 'Mm-yAD8E3SU', label: 'Union Station DC Railcam', city: 'Washington, DC', region: 'Mid-Atlantic', type: 'rail' },
+  { id: 'wgkdREYOfw0', label: 'Ashland Rail Cam (PTZ)', city: 'Ashland, VA', region: 'Mid-Atlantic', type: 'rail' },
+
+  // --- SOUTHEAST ---
+  { id: 'ZksWoEAhmTU', label: 'St. George St, St. Augustine', city: 'St. Augustine, FL', region: 'Southeast', type: 'city' },
+  { id: 'cmkAbDUEoyA', label: 'Hollywood Beach Broadwalk', city: 'Hollywood, FL', region: 'Southeast', type: 'beach' },
+  { id: 'YWs0HMRVCBY', label: 'Fort Lauderdale Beach Bar', city: 'Fort Lauderdale, FL', region: 'Southeast', type: 'beach' },
+  { id: 'DxZziUUr6CY', label: 'Port Miami + Marine Radio', city: 'Miami, FL', region: 'Southeast', type: 'harbor' },
+
+  // --- MIDWEST ---
+  { id: '67BCsiW-1Io', label: 'Midway Airport 4K', city: 'Chicago, IL', region: 'Midwest', type: 'airport' },
+
+  // --- WEST ---
+  { id: 'EO_1LWqsCNE', label: 'Venice Beach Live', city: 'Los Angeles, CA', region: 'West', type: 'beach' },
+  { id: 'KCcNxl2ZppI', label: 'Fremont Street Downtown', city: 'Las Vegas, NV', region: 'West', type: 'city' },
+  { id: 'CXYr04BWvmc', label: 'Bay Bridge Live', city: 'San Francisco, CA', region: 'West', type: 'traffic' },
+
+  // --- WEATHER / NEWS ---
+  { id: 'wt6SIE7BXS8', label: 'FOX Weather Live 24/7', city: 'National', region: 'Weather', type: 'news' },
+
+  // --- MULTI / WORLD ---
+  { id: 'Jgp4JDG-nsk', label: 'USA Cities Tour (Vegas, NYC, Miami)', city: 'Multi-City', region: 'Multi', type: 'city' },
+  { id: 'EFum1rGUdkk', label: 'Top 1200 Webcams Worldwide', city: 'Global', region: 'Multi', type: 'city' },
+  { id: 'HfgIFGbdGJ0', label: 'The World Live (earthTV)', city: 'Global', region: 'Multi', type: 'city' },
 ];
 
 const REGIONS = ['All', ...new Set(CAMERAS.map(c => c.region))];
+
+const TYPE_ICONS = {
+  rail: Train,
+  traffic: Camera,
+  harbor: Waves,
+  news: Radio,
+};
+
+function TypeBadge({ type }) {
+  if (!type || type === 'city' || type === 'beach') return null;
+  const Icon = TYPE_ICONS[type] || Camera;
+  return (
+    <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-700/50 text-slate-400">
+      <Icon size={10} />
+      {type}
+    </span>
+  );
+}
 
 export default function Cameras() {
   const [expanded, setExpanded] = useState(null);
@@ -101,9 +112,9 @@ export default function Cameras() {
           <Camera size={20} className="text-purple-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Live Weather Cameras</h3>
+          <h3 className="text-lg font-semibold text-slate-200">Live Cameras</h3>
           <p className="text-sm text-slate-500">
-            24/7 live streams -- click any feed to expand
+            {CAMERAS.length} live feeds -- city cams, traffic, rail, harbors, news
           </p>
         </div>
       </div>
@@ -120,15 +131,20 @@ export default function Cameras() {
                 : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
           >
             {r}
+            {r !== 'All' && (
+              <span className="ml-1 text-[10px] opacity-60">
+                ({CAMERAS.filter(c => c.region === r).length})
+              </span>
+            )}
           </button>
         ))}
       </div>
 
       {/* Camera grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filtered.map(cam => (
           <div key={cam.id} className="glass-panel overflow-hidden group">
-            <div className="relative" style={{ height: 260 }}>
+            <div className="relative" style={{ height: 220 }}>
               <iframe
                 src={`https://www.youtube.com/embed/${cam.id}?autoplay=0&mute=1&rel=0`}
                 className="w-full h-full border-0"
@@ -147,8 +163,9 @@ export default function Cameras() {
               </button>
             </div>
             <div className="px-3 py-2 flex items-center gap-2">
-              <MapPin size={12} className="text-purple-400 shrink-0" />
+              <MapPin size={11} className="text-purple-400 shrink-0" />
               <span className="text-xs font-medium text-slate-300 truncate">{cam.label}</span>
+              <TypeBadge type={cam.type} />
               <span className="text-[10px] text-slate-500 ml-auto shrink-0">{cam.city}</span>
             </div>
           </div>
@@ -156,7 +173,7 @@ export default function Cameras() {
       </div>
 
       <p className="text-[11px] text-slate-600 text-center">
-        Live camera feeds via YouTube -- streams are maintained by third-party broadcasters
+        Live feeds via YouTube -- streams maintained by third-party broadcasters
       </p>
     </div>
   );
