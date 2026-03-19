@@ -1,52 +1,97 @@
 import { useState } from 'react';
-import { Camera, MapPin, Navigation, Eye } from 'lucide-react';
+import { Camera, Maximize2, Minimize2, MapPin } from 'lucide-react';
 
-const QUICK_LOCATIONS = [
-  { label: 'New York', lat: 40.71, lon: -74.01, zoom: 9 },
-  { label: 'Los Angeles', lat: 34.05, lon: -118.24, zoom: 9 },
-  { label: 'Chicago', lat: 41.88, lon: -87.63, zoom: 9 },
-  { label: 'Miami', lat: 25.76, lon: -80.19, zoom: 9 },
-  { label: 'San Francisco', lat: 37.77, lon: -122.42, zoom: 10 },
-  { label: 'Seattle', lat: 47.61, lon: -122.33, zoom: 9 },
-  { label: 'Denver', lat: 39.74, lon: -104.99, zoom: 9 },
-  { label: 'Atlanta', lat: 33.75, lon: -84.39, zoom: 9 },
-  { label: 'Dallas', lat: 32.78, lon: -96.80, zoom: 9 },
-  { label: 'Boston', lat: 42.36, lon: -71.06, zoom: 10 },
-  { label: 'Phoenix', lat: 33.45, lon: -112.07, zoom: 9 },
-  { label: 'Las Vegas', lat: 36.17, lon: -115.14, zoom: 10 },
-  { label: 'DC', lat: 38.91, lon: -77.04, zoom: 10 },
-  { label: 'Nashville', lat: 36.16, lon: -86.78, zoom: 10 },
-  { label: 'Minneapolis', lat: 44.98, lon: -93.27, zoom: 9 },
-  { label: 'US Overview', lat: 39.8, lon: -98.5, zoom: 4 },
+const CAMERAS = [
+  {
+    id: 'rnXIjl_Rzy4',
+    label: 'Times Square, NYC',
+    city: 'New York',
+    region: 'Northeast',
+  },
+  {
+    id: 'TMXXzJZiChc',
+    label: 'NYC Weather Cam',
+    city: 'New York',
+    region: 'Northeast',
+  },
+  {
+    id: 'rV_RZ_xKxHM',
+    label: 'NYC Skyline View',
+    city: 'New York',
+    region: 'Northeast',
+  },
+  {
+    id: 'EO_1LWqsCNE',
+    label: 'Venice Beach, LA',
+    city: 'Los Angeles',
+    region: 'West',
+  },
+  {
+    id: 'KCcNxl2ZppI',
+    label: 'Fremont St, Las Vegas',
+    city: 'Las Vegas',
+    region: 'West',
+  },
+  {
+    id: 'ZksWoEAhmTU',
+    label: 'St. George St, St. Augustine',
+    city: 'St. Augustine',
+    region: 'Southeast',
+  },
+  {
+    id: 'EFum1rGUdkk',
+    label: 'Top Webcams Worldwide',
+    city: 'Global',
+    region: 'Other',
+  },
+  {
+    id: 'Jgp4JDG-nsk',
+    label: 'USA City Tour (Vegas, NYC, Miami)',
+    city: 'Multi-City',
+    region: 'Other',
+  },
 ];
 
-function buildWindyUrl(lat, lon, zoom, overlay) {
-  return `https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=%C2%B0F&metricWind=mph&zoom=${zoom}&overlay=${overlay}&product=ecmwf&level=surface&lat=${lat}&lon=${lon}`;
-}
+const REGIONS = ['All', ...new Set(CAMERAS.map(c => c.region))];
 
-export default function Cameras({ location }) {
-  const defaultLat = location?.latitude || 39.8;
-  const defaultLon = location?.longitude || -98.5;
-  const [mapView, setMapView] = useState({ lat: defaultLat, lon: defaultLon, zoom: 7 });
-  const [overlay, setOverlay] = useState('webcams');
-  const [iframeKey, setIframeKey] = useState(0);
+export default function Cameras() {
+  const [expanded, setExpanded] = useState(null);
+  const [region, setRegion] = useState('All');
 
-  const jumpTo = (loc) => {
-    setMapView({ lat: loc.lat, lon: loc.lon, zoom: loc.zoom });
-    setIframeKey(k => k + 1);
-  };
+  const filtered = region === 'All' ? CAMERAS : CAMERAS.filter(c => c.region === region);
 
-  const resetToMyLocation = () => {
-    setMapView({ lat: defaultLat, lon: defaultLon, zoom: 7 });
-    setIframeKey(k => k + 1);
-  };
-
-  const toggleOverlay = (ov) => {
-    setOverlay(ov);
-    setIframeKey(k => k + 1);
-  };
-
-  const embedUrl = buildWindyUrl(mapView.lat, mapView.lon, mapView.zoom, overlay);
+  if (expanded) {
+    const cam = CAMERAS.find(c => c.id === expanded);
+    return (
+      <div className="animate-slide-up">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Camera size={16} className="text-purple-400" />
+            <span className="text-sm font-medium text-slate-200">{cam?.label}</span>
+            <span className="text-xs text-slate-500">{cam?.city}</span>
+          </div>
+          <button
+            onClick={() => setExpanded(null)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
+              bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50 transition-all"
+          >
+            <Minimize2 size={13} />
+            Back to Grid
+          </button>
+        </div>
+        <div className="rounded-2xl overflow-hidden border border-slate-700/50"
+          style={{ height: 'calc(100vh - 210px)', minHeight: 450 }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${expanded}?autoplay=1&mute=1&rel=0`}
+            className="w-full h-full border-0"
+            title={cam?.label || 'Live Camera'}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 animate-slide-up">
@@ -58,77 +103,60 @@ export default function Cameras({ location }) {
         <div>
           <h3 className="text-lg font-semibold text-slate-200">Live Weather Cameras</h3>
           <p className="text-sm text-slate-500">
-            Click camera icons on the map to view live feeds
+            24/7 live streams -- click any feed to expand
           </p>
         </div>
       </div>
 
-      {/* Overlay toggle */}
-      <div className="flex items-center gap-2">
-        {[
-          { id: 'webcams', label: 'Webcams', icon: Camera },
-          { id: 'radar', label: 'Radar', icon: Eye },
-        ].map(ov => (
+      {/* Region filter */}
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {REGIONS.map(r => (
           <button
-            key={ov.id}
-            onClick={() => toggleOverlay(ov.id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
-              ${overlay === ov.id
+            key={r}
+            onClick={() => setRegion(r)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+              ${region === r
                 ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
-                : 'glass-panel-light text-slate-400 hover:text-slate-200'}`}
+                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
           >
-            <ov.icon size={13} />
-            {ov.label}
+            {r}
           </button>
         ))}
-        <button
-          onClick={resetToMyLocation}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
-            glass-panel-light text-slate-400 hover:text-slate-200 transition-all ml-auto"
-        >
-          <Navigation size={13} />
-          My Location
-        </button>
       </div>
 
-      {/* Main map */}
-      <div className="rounded-2xl overflow-hidden border border-slate-700/50"
-        style={{ height: 'calc(100vh - 310px)', minHeight: 450 }}>
-        <iframe
-          key={iframeKey}
-          src={embedUrl}
-          className="w-full h-full border-0"
-          title="Live Weather Cameras Map"
-          loading="lazy"
-          allow="fullscreen"
-          allowFullScreen
-        />
-      </div>
-
-      {/* Quick locations */}
-      <div className="glass-panel p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <MapPin size={14} className="text-blue-400" />
-          <h4 className="text-sm font-medium text-slate-300">Jump to Location</h4>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {QUICK_LOCATIONS.map(loc => (
-            <button
-              key={loc.label}
-              onClick={() => jumpTo(loc)}
-              className={`px-2.5 py-1 rounded-lg text-xs transition-all
-                ${mapView.lat === loc.lat && mapView.lon === loc.lon
-                  ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
-                  : 'bg-slate-800/50 text-slate-400 border border-slate-700/30 hover:text-slate-200 hover:bg-slate-700/50'}`}
-            >
-              {loc.label}
-            </button>
-          ))}
-        </div>
+      {/* Camera grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {filtered.map(cam => (
+          <div key={cam.id} className="glass-panel overflow-hidden group">
+            <div className="relative" style={{ height: 260 }}>
+              <iframe
+                src={`https://www.youtube.com/embed/${cam.id}?autoplay=0&mute=1&rel=0`}
+                className="w-full h-full border-0"
+                title={cam.label}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+              <button
+                onClick={() => setExpanded(cam.id)}
+                className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white/80
+                  opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
+                title="Expand"
+              >
+                <Maximize2 size={14} />
+              </button>
+            </div>
+            <div className="px-3 py-2 flex items-center gap-2">
+              <MapPin size={12} className="text-purple-400 shrink-0" />
+              <span className="text-xs font-medium text-slate-300 truncate">{cam.label}</span>
+              <span className="text-[10px] text-slate-500 ml-auto shrink-0">{cam.city}</span>
+            </div>
+          </div>
+        ))}
       </div>
 
       <p className="text-[11px] text-slate-600 text-center">
-        Camera data powered by Windy.com webcam network
+        Live camera feeds via YouTube -- streams are maintained by third-party broadcasters
       </p>
     </div>
   );
