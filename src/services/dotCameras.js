@@ -140,14 +140,20 @@ const ME_DOT = {
   })),
 };
 
+import { DOT_SOURCES_EXTRA } from './dotCamerasWest';
+
 export const DOT_SOURCES = {
+  // Northeast
   NYC: NYC_DOT,
   CT: CT_DOT,
   PA: PA_DOT,
   NH: NH_DOT,
   VT: VT_DOT,
   ME: ME_DOT,
+  // Southeast, Midwest, West (from dotCamerasWest.js)
+  ...DOT_SOURCES_EXTRA,
 };
 
 // Note: NJ, MA, RI, DE DOT APIs are either blocked by firewalls (NJ),
 // behind SPAs requiring authentication (MA), or have no public camera API (RI, DE).
+// Tested ~35 other state 511 systems -- most are behind SPAs, firewalled, or use incompatible platforms.

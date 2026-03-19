@@ -265,7 +265,7 @@ export default function Cameras() {
           <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center gap-2">
             <RefreshCw size={14} className="text-blue-400 shrink-0" />
             <span className="text-xs text-blue-300">
-              {totalDotCams} DOT cameras from NYC, CT, PA, NH, VT, ME. Auto-refresh every 8s. NJ/MA/RI/DE APIs are restricted by their states.
+              {totalDotCams} DOT cameras across {DOT_KEYS.length} states. Auto-refresh every 8s. Some state DOT APIs are restricted.
             </span>
           </div>
 
