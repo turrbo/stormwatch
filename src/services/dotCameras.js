@@ -47,6 +47,14 @@ const CT_DOT = {
     { imgId: 597, label: 'I-95 SB Branford Exit 54', road: 'I-95' },
     { imgId: 614, label: 'I-91 NB New Haven Exit 8', road: 'I-91' },
     { imgId: 631, label: 'I-95 NB Clinton Exit 63', road: 'I-95' },
+    { imgId: 309, label: 'I-84 EB Manchester Exit 63 (Tolland Tpke)', road: 'I-84' },
+    { imgId: 352, label: 'I-91 SB Hartford Exit 27 (Airport Rd)', road: 'I-91' },
+    { imgId: 396, label: 'I-84 WB W/O Exit 59 (Middle Tpke)', road: 'I-84' },
+    { imgId: 438, label: 'I-91 SB Wethersfield Exit 25 (RT 3)', road: 'I-91' },
+    { imgId: 480, label: 'I-91 SB Middletown S/O Exit 21', road: 'I-91' },
+    { imgId: 521, label: 'RT 9 SB New Britain S/O Exit 35', road: 'RT-9' },
+    { imgId: 564, label: 'I-95 SB Fairfield N/O Exit 24', road: 'I-95' },
+    { imgId: 607, label: 'I-796 SB Milford Pkwy (East Rutland)', road: 'I-796' },
   ].map(c => ({
     id: `ct-${c.imgId}`,
     label: c.label,
@@ -142,6 +150,7 @@ const ME_DOT = {
 
 import { DOT_SOURCES_EXTRA } from './dotCamerasWest';
 import { DOT_SOURCES_NW } from './dotCamerasNorthwest';
+import { DOT_SOURCES_MORE } from './dotCamerasMore';
 
 export const DOT_SOURCES = {
   // Northeast
@@ -155,8 +164,10 @@ export const DOT_SOURCES = {
   ...DOT_SOURCES_EXTRA,
   // Northwest - Oregon TripCheck + Washington WSDOT
   ...DOT_SOURCES_NW,
+  // Additional states - CO, IN, MN, KS, NE, SC, AL, NY State
+  ...DOT_SOURCES_MORE,
 };
 
 // Note: NJ, MA, RI, DE DOT APIs are either blocked by firewalls (NJ),
 // behind SPAs requiring authentication (MA), or have no public camera API (RI, DE).
-// Tested ~35 other state 511 systems -- most are behind SPAs, firewalled, or use incompatible platforms.
+// TN, NC, TX, MD, MI, MO, IL DOT APIs require auth, use incompatible platforms, or are behind SPAs.
