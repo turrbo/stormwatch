@@ -27,7 +27,7 @@ const tabs = [
 export default function Navigation({ activeTab, onTabChange, alertCount = 0 }) {
   return (
     <nav className="sticky top-[68px] z-40 bg-neutral-900/90 backdrop-blur-md border-b border-neutral-700/30">
-      <div className="max-w-7xl mx-auto flex overflow-x-auto hourly-scroll">
+      <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-x-0.5 gap-y-0 px-2">
         {tabs.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -35,13 +35,13 @@ export default function Navigation({ activeTab, onTabChange, alertCount = 0 }) {
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-3 text-xs font-medium whitespace-nowrap transition-all
+              className={`flex items-center gap-1 px-2 sm:px-2.5 py-2.5 text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all
                 border-b-2 relative
                 ${isActive
                   ? 'text-red-400 border-red-400'
                   : 'text-neutral-500 border-transparent hover:text-neutral-300 hover:border-neutral-600'}`}
             >
-              <Icon size={14} />
+              <Icon size={13} />
               <span className="hidden sm:inline">{tab.label}</span>
               {tab.id === 'alerts' && alertCount > 0 && (
                 <span className="w-4 h-4 bg-red-500 rounded-full text-[9px] font-bold flex items-center justify-center text-white animate-pulse-glow">

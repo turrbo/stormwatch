@@ -55,7 +55,7 @@ export default function Header({
             style={{ backgroundColor: '#C8102E' }}>
             <span className="text-white text-[13px] font-bold leading-none tracking-tight">EOC</span>
           </div>
-          <div>
+          <div className="text-center">
             <h1 className="text-white text-lg sm:text-xl font-bold leading-none"
               style={{ letterSpacing: '1.5px' }}>EOC</h1>
             <p className="text-[9px] sm:text-[10px] text-neutral-400 uppercase tracking-widest mt-0.5">Emergency Operation Center</p>
@@ -129,12 +129,13 @@ export default function Header({
               <div className="absolute top-full right-0 mt-1 glass-panel py-1 shadow-xl w-56 z-50">
                 <div className="px-3 py-1.5 text-xs font-medium text-neutral-500 uppercase tracking-wider">Saved Locations</div>
                 {savedLocations.map(s => (
-                  <button key={s.id} onClick={() => { selectLocation(s); setShowSaved(false); }}
-                    className="w-full text-left px-3 py-2 hover:bg-neutral-700/50 flex items-center justify-between transition-colors">
+                  <div key={s.id}
+                    className="w-full text-left px-3 py-2 hover:bg-neutral-700/50 flex items-center justify-between transition-colors cursor-pointer"
+                    onClick={() => { onSelectLocation(s); setShowSaved(false); }}>
                     <span className="text-sm text-neutral-300">{s.label || s.name}</span>
                     <button onClick={(e) => { e.stopPropagation(); onRemoveLocation(s.id); }}
-                      className="text-neutral-600 hover:text-red-400"><X size={12} /></button>
-                  </button>
+                      className="text-neutral-600 hover:text-red-400 p-0.5"><X size={12} /></button>
+                  </div>
                 ))}
               </div>
             )}
