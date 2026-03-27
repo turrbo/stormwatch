@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Camera, Maximize2, Minimize2, MapPin, Train, Radio, Waves, Video, RefreshCw, Plane, Anchor, Loader2, AlertTriangle } from 'lucide-react';
+import { Camera, Maximize2, Minimize2, MapPin, Train, Radio, Waves, Video, RefreshCw, Plane, Anchor, Loader2 } from 'lucide-react';
 import { DOT_SOURCES } from '../services/dotCameras';
-import { fetchFaaSites, fetchCameraImage, STATE_NAMES } from '../services/faaWeatherCams';
+import { FAA_SITES, FAA_BY_STATE, FAA_STATE_KEYS, STATE_NAMES, faaImageUrl, faaLiveUrl } from '../services/faaWeatherCams';
 import { BUOY_STATIONS, BUOY_REGIONS, buildBuoyImageUrl } from '../services/noaaBuoyCams';
 
 // ── YouTube Live streams ──────────────────────────────────────────────
@@ -78,45 +78,19 @@ function DotCamImage({ src, label }) {
   );
 }
 
-// ── FAA Camera Card (loads image on mount) ──
+// ── FAA Camera Card (uses static CDN clear-day images) ──
 function FaaCamCard({ site, onExpand }) {
-  const [imgUrl, setImgUrl] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const camId = site.cameras[0]?.cameraId;
-
-  useEffect(() => {
-    if (!camId) { setLoading(false); setError(true); return; }
-    let cancelled = false;
-    fetchCameraImage(camId).then(url => {
-      if (cancelled) return;
-      if (url) setImgUrl(url);
-      else setError(true);
-      setLoading(false);
-    }).catch(() => { if (!cancelled) { setError(true); setLoading(false); } });
-    return () => { cancelled = true; };
-  }, [camId]);
+  const imgUrl = faaImageUrl(site.camId);
+  const liveUrl = faaLiveUrl(site.camId);
 
   return (
     <div
       className="glass-panel overflow-hidden group cursor-pointer hover:border-red-500/30 transition-all"
-      onClick={() => imgUrl && onExpand(site, imgUrl)}
+      onClick={() => onExpand(site, imgUrl)}
     >
       <div className="relative bg-neutral-900" style={{ height: 170 }}>
-        {loading && (
-          <div className="w-full h-full flex items-center justify-center">
-            <Loader2 size={20} className="text-neutral-500 animate-spin" />
-          </div>
-        )}
-        {error && !loading && (
-          <div className="w-full h-full flex items-center justify-center text-neutral-600">
-            <AlertTriangle size={20} />
-          </div>
-        )}
-        {imgUrl && (
-          <img src={imgUrl} alt={site.siteName} className="w-full h-full object-cover" loading="lazy"
-            onError={(e) => { e.target.style.opacity = '0.3'; }} />
-        )}
+        <img src={imgUrl} alt={site.name} className="w-full h-full object-cover" loading="lazy"
+          onError={(e) => { e.target.style.opacity = '0.3'; }} />
         <button
           className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white/80
             opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
@@ -127,11 +101,21 @@ function FaaCamCard({ site, onExpand }) {
         <span className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-black/60 text-amber-300">
           {site.icao || site.state}
         </span>
+        <a
+          href={liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-500/80 text-black
+            opacity-0 group-hover:opacity-100 transition-opacity hover:bg-amber-400"
+        >
+          Live View
+        </a>
       </div>
       <div className="px-3 py-2 flex items-center gap-2">
         <Plane size={11} className="text-amber-400 shrink-0" />
-        <span className="text-xs font-medium text-neutral-300 truncate">{site.siteName}</span>
-        <span className="text-[10px] text-neutral-500 ml-auto shrink-0">{site.siteArea}</span>
+        <span className="text-xs font-medium text-neutral-300 truncate">{site.name}</span>
+        <span className="text-[10px] text-neutral-500 ml-auto shrink-0">{site.area}</span>
       </div>
     </div>
   );
@@ -201,9 +185,6 @@ export default function Cameras() {
   const [ytRegion, setYtRegion] = useState('All');
   const [dotFilter, setDotFilter] = useState('All');
   // FAA state
-  const [faaSites, setFaaSites] = useState(null);
-  const [faaLoading, setFaaLoading] = useState(false);
-  const [faaError, setFaaError] = useState(null);
   const [faaStateFilter, setFaaStateFilter] = useState('All');
   // NOAA state
   const [buoyRegion, setBuoyRegion] = useState('All');
@@ -217,24 +198,9 @@ export default function Cameras() {
     ? allDotCams
     : allDotCams.filter(c => c.sourceKey === dotFilter);
 
-  // Load FAA sites when tab is selected
-  useEffect(() => {
-    if (tab !== 'FAA Weather Cams' || faaSites) return;
-    setFaaLoading(true);
-    fetchFaaSites()
-      .then(data => { setFaaSites(data); setFaaLoading(false); })
-      .catch(err => { setFaaError(err.message); setFaaLoading(false); });
-  }, [tab, faaSites]);
-
-  const faaStateKeys = faaSites ? Object.keys(faaSites).sort() : [];
-  const faaFiltered = faaSites
-    ? (faaStateFilter === 'All'
-        ? faaStateKeys.flatMap(k => faaSites[k])
-        : faaSites[faaStateFilter] || [])
-    : [];
-  const totalFaaCams = faaSites
-    ? faaStateKeys.reduce((sum, k) => sum + faaSites[k].length, 0)
-    : 0;
+  const faaFiltered = faaStateFilter === 'All'
+    ? FAA_SITES
+    : FAA_BY_STATE[faaStateFilter] || [];
 
   // NOAA filtered
   const buoyFiltered = buoyRegion === 'All'
@@ -490,85 +456,55 @@ export default function Cameras() {
       {/* ── FAA WEATHER CAMS TAB ── */}
       {tab === 'FAA Weather Cams' && (
         <>
-          {faaLoading && (
-            <div className="flex items-center justify-center py-16 gap-3">
-              <Loader2 size={20} className="text-amber-400 animate-spin" />
-              <span className="text-sm text-neutral-400">Loading FAA Weather Camera sites...</span>
-            </div>
-          )}
-
-          {faaError && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-center">
-              <AlertTriangle size={20} className="text-red-400 mx-auto mb-2" />
-              <p className="text-sm text-red-300">Failed to load FAA cameras: {faaError}</p>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              onClick={() => setFaaStateFilter('All')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                ${faaStateFilter === 'All'
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                  : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
+            >
+              All States <span className="ml-1 text-[10px] opacity-60">({FAA_SITES.length})</span>
+            </button>
+            {FAA_STATE_KEYS.map(k => (
               <button
-                onClick={() => { setFaaSites(null); setFaaError(null); }}
-                className="mt-2 px-3 py-1 rounded-lg text-xs bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30"
+                key={k}
+                onClick={() => setFaaStateFilter(k)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                  ${faaStateFilter === k
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
               >
-                Retry
+                {k}
+                <span className="ml-1 text-[10px] opacity-60">({FAA_BY_STATE[k].length})</span>
               </button>
-            </div>
-          )}
+            ))}
+          </div>
 
-          {faaSites && (
-            <>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <button
-                  onClick={() => setFaaStateFilter('All')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
-                    ${faaStateFilter === 'All'
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                      : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
-                >
-                  All States <span className="ml-1 text-[10px] opacity-60">({totalFaaCams})</span>
-                </button>
-                {faaStateKeys.map(k => (
-                  <button
-                    key={k}
-                    onClick={() => setFaaStateFilter(k)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
-                      ${faaStateFilter === k
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                        : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
-                  >
-                    {k}
-                    <span className="ml-1 text-[10px] opacity-60">({faaSites[k].length})</span>
-                  </button>
-                ))}
-              </div>
+          <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
+            <Plane size={14} className="text-amber-400 shrink-0" />
+            <span className="text-xs text-amber-300">
+              {FAA_SITES.length} FAA aviation weather cameras across {FAA_STATE_KEYS.length} states. Click "Live View" for real-time imagery.
+            </span>
+          </div>
 
-              <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
-                <Plane size={14} className="text-amber-400 shrink-0" />
-                <span className="text-xs text-amber-300">
-                  {totalFaaCams} FAA aviation weather camera sites across {faaStateKeys.length} states. Images update every ~5 min.
-                </span>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+            {faaFiltered.map(site => (
+              <FaaCamCard
+                key={site.siteId}
+                site={site}
+                onExpand={(s, url) => {
+                  setExpanded(s.siteId);
+                  setExpandedType('faa');
+                  setExpandedData({ ...s, imgUrl: url });
+                }}
+              />
+            ))}
+          </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-                {faaFiltered.slice(0, 40).map(site => (
-                  <FaaCamCard
-                    key={site.siteId}
-                    site={site}
-                    onExpand={(s, url) => {
-                      setExpanded(s.siteId);
-                      setExpandedType('faa');
-                      setExpandedData({ ...s, imgUrl: url });
-                    }}
-                  />
-                ))}
-              </div>
-
-              {faaFiltered.length > 40 && (
-                <p className="text-[11px] text-neutral-500 text-center">
-                  Showing 40 of {faaFiltered.length} sites. Filter by state to see more.
-                </p>
-              )}
-
-              <p className="text-[11px] text-neutral-600 text-center">
-                Data from FAA Aviation Weather Camera Program (weathercams.faa.gov)
-              </p>
-            </>
-          )}
+          <p className="text-[11px] text-neutral-600 text-center">
+            Data from FAA Aviation Weather Camera Program (weathercams.faa.gov)
+          </p>
         </>
       )}
 
