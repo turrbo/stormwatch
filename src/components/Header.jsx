@@ -12,6 +12,7 @@ export default function Header({
   const [showSaved, setShowSaved] = useState(false);
   const inputRef = useRef(null);
   const dropdownRef = useRef(null);
+  const savedRef = useRef(null);
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -29,6 +30,8 @@ export default function Header({
     const handleClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowResults(false);
+      }
+      if (savedRef.current && !savedRef.current.contains(e.target)) {
         setShowSaved(false);
       }
     };
@@ -116,7 +119,7 @@ export default function Header({
             </button>
           )}
 
-          <div className="relative">
+          <div className="relative" ref={savedRef}>
             <button onClick={() => setShowSaved(!showSaved)} title="Saved locations"
               className="p-2 rounded-lg hover:bg-neutral-700/50 text-neutral-400 hover:text-neutral-200 transition-colors">
               <MapPin size={16} />

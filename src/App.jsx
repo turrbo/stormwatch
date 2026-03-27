@@ -18,7 +18,7 @@ import HistoricalWeather from './components/HistoricalWeather';
 import PWSNetwork from './components/PWSNetwork';
 import Meteograms from './components/Meteograms';
 import NWSDiscussion from './components/NWSDiscussion';
-import VentuskyMap from './components/VentuskyMap';
+
 import TropicalTracker from './components/TropicalTracker';
 import LoadingSpinner from './components/LoadingSpinner';
 import { AlertTriangle } from 'lucide-react';
@@ -74,7 +74,7 @@ export default function App() {
             {activeTab === 'lightning' && <LightningMap location={location} />}
             {activeTab === 'models' && <ModelsView />}
             {activeTab === 'surface' && <SurfaceAnalysis />}
-            {activeTab === 'ventusky' && <VentuskyMap location={location} />}
+
             {activeTab === 'tropical' && <TropicalTracker />}
             {activeTab === 'forecast' && weather && <DailyForecast weather={weather} />}
             {activeTab === 'alerts' && <AlertsPanel alerts={alerts} />}

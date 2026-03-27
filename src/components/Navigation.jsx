@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Map, Calendar, AlertTriangle, Wind, Camera,
-  Satellite, Zap, BarChart3, Globe, Snowflake, History, Radio,
+  Satellite, Zap, BarChart3, Snowflake, History, Radio,
   LineChart, Building2, CloudLightning, Layers
 } from 'lucide-react';
 
@@ -11,7 +11,7 @@ const tabs = [
   { id: 'lightning', label: 'Lightning', icon: Zap },
   { id: 'models', label: 'Models', icon: BarChart3 },
   { id: 'surface', label: 'Surface', icon: Layers },
-  { id: 'ventusky', label: 'Ventusky', icon: Globe },
+
   { id: 'tropical', label: 'Tropical', icon: CloudLightning },
   { id: 'forecast', label: '10-Day', icon: Calendar },
   { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
