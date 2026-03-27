@@ -72,7 +72,7 @@ export default function App() {
             {activeTab === 'radar' && <RadarMap location={location} />}
             {activeTab === 'satellite' && <SatelliteView />}
 
-            {activeTab === 'models' && <ModelsView />}
+            {activeTab === 'models' && <ModelsView location={location} />}
             {activeTab === 'surface' && <SurfaceAnalysis />}
 
             {activeTab === 'tropical' && <TropicalTracker />}
