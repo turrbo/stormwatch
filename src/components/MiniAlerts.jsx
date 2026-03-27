@@ -12,10 +12,10 @@ export default function MiniAlerts({ alerts }) {
       <AlertTriangle size={18} style={{ color: color.text }} className="shrink-0 animate-pulse-glow" />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold" style={{ color: color.text }}>{top.event}</p>
-        <p className="text-xs text-slate-400 truncate">{top.headline}</p>
+        <p className="text-xs text-neutral-400 truncate">{top.headline}</p>
       </div>
       {alerts.length > 1 && (
-        <span className="text-xs px-2 py-0.5 rounded-full bg-slate-700/50 text-slate-400">
+        <span className="text-xs px-2 py-0.5 rounded-full bg-neutral-700/50 text-neutral-400">
           +{alerts.length - 1} more
         </span>
       )}

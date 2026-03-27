@@ -20,8 +20,8 @@ export default function SatelliteView() {
           <Satellite size={20} className="text-indigo-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Satellite Imagery</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Satellite Imagery</h3>
+          <p className="text-sm text-neutral-500">
             GOES-East/West imagery via COD NEXLAB
           </p>
         </div>
@@ -29,13 +29,13 @@ export default function SatelliteView() {
 
       {/* Band selector */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <Eye size={13} className="text-slate-500" />
+        <Eye size={13} className="text-neutral-500" />
         {BAND_KEYS.map(b => (
           <button key={b} onClick={() => setBand(b)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${band === b
                 ? 'bg-purple-500/25 text-purple-300 border border-purple-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {SAT_BANDS[b].label}
           </button>
         ))}
@@ -43,25 +43,25 @@ export default function SatelliteView() {
 
       {/* Sector selector */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <Layers size={13} className="text-slate-500" />
+        <Layers size={13} className="text-neutral-500" />
         {SECTOR_KEYS.map(s => (
           <button key={s} onClick={() => setSector(s)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${sector === s
                 ? 'bg-red-500/25 text-red-300 border border-red-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {SAT_SECTORS[s]}
           </button>
         ))}
         <button onClick={() => setImgKey(k => k + 1)}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto flex items-center gap-1">
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 transition-all ml-auto flex items-center gap-1">
           <RefreshCw size={11} /> Refresh
         </button>
       </div>
 
       {/* Satellite image */}
       <div className="glass-panel overflow-hidden">
-        <div className="relative bg-slate-900" style={{ minHeight: 400 }}>
+        <div className="relative bg-neutral-900" style={{ minHeight: 400 }}>
           <img
             key={`${imgUrl}-${imgKey}`}
             src={`${imgUrl}?t=${Date.now()}-${imgKey}`}
@@ -73,18 +73,18 @@ export default function SatelliteView() {
             }}
           />
         </div>
-        <div className="px-4 py-2 border-t border-slate-700/30 text-xs text-slate-500">
+        <div className="px-4 py-2 border-t border-neutral-700/30 text-xs text-neutral-500">
           COD NEXLAB -- GOES / {SAT_BANDS[band]?.label} / {SAT_SECTORS[sector]} -- latest image
         </div>
       </div>
 
       {/* NOAA GOES direct imagery as backup */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center gap-2">
+        <div className="px-4 py-3 border-b border-neutral-700/30 flex items-center gap-2">
           <Globe size={14} className="text-cyan-400" />
-          <span className="text-sm font-medium text-slate-300">NOAA GOES-East -- GeoColor CONUS</span>
+          <span className="text-sm font-medium text-neutral-300">NOAA GOES-East -- GeoColor CONUS</span>
         </div>
-        <div className="relative bg-slate-900">
+        <div className="relative bg-neutral-900">
           <img
             src={`https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/1250x750.jpg?t=${Date.now()}`}
             alt="NOAA GOES-East GeoColor"
@@ -94,7 +94,7 @@ export default function SatelliteView() {
         </div>
       </div>
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Satellite data from College of DuPage NEXLAB + NOAA GOES imagery
       </p>
     </div>

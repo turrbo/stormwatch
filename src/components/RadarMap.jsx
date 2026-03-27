@@ -35,7 +35,7 @@ export default function RadarMap({ location }) {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${layer === l.id
                 ? 'bg-red-500/25 text-red-300 border border-red-500/50 shadow-lg shadow-red-500/10'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
           >
             <l.icon size={13} />
             {l.label}
@@ -44,7 +44,7 @@ export default function RadarMap({ location }) {
       </div>
 
       {/* Map */}
-      <div className="rounded-2xl overflow-hidden border border-slate-700/50"
+      <div className="rounded-2xl overflow-hidden border border-neutral-700/50"
         style={{ height: 'calc(100vh - 210px)', minHeight: 450 }}>
         <iframe
           key={iframeKey}
@@ -56,7 +56,7 @@ export default function RadarMap({ location }) {
         />
       </div>
 
-      <p className="text-[11px] text-slate-600 mt-2 text-center">
+      <p className="text-[11px] text-neutral-600 mt-2 text-center">
         Interactive radar powered by Windy.com -- zoom, pan, and click for details
       </p>
     </div>

@@ -19,12 +19,12 @@ export default function CurrentWeather({ weather }) {
               {formatTemp(c.temperature_2m)}
             </span>
           </div>
-          <p className="text-lg text-slate-300 mt-1">{info.label}</p>
-          <p className="text-sm text-slate-500 flex items-center gap-1">
+          <p className="text-lg text-neutral-300 mt-1">{info.label}</p>
+          <p className="text-sm text-neutral-500 flex items-center gap-1">
             <Thermometer size={12} />
             Feels like {formatTemp(c.apparent_temperature)}
           </p>
-          <div className="flex gap-3 mt-2 text-sm text-slate-400">
+          <div className="flex gap-3 mt-2 text-sm text-neutral-400">
             <span className="text-orange-400">H: {formatTemp(d.temperature_2m_max[0])}</span>
             <span className="text-red-400">L: {formatTemp(d.temperature_2m_min[0])}</span>
           </div>
@@ -50,12 +50,12 @@ export default function CurrentWeather({ weather }) {
 function DetailCard({ icon: Icon, label, value, sub }) {
   return (
     <div className="glass-panel-light p-3 flex flex-col gap-1">
-      <div className="flex items-center gap-1.5 text-slate-500 text-xs">
+      <div className="flex items-center gap-1.5 text-neutral-500 text-xs">
         <Icon size={12} />
         <span>{label}</span>
       </div>
-      <div className="text-sm font-semibold text-slate-200">{value}</div>
-      {sub && <div className="text-xs text-slate-500">{sub}</div>}
+      <div className="text-sm font-semibold text-neutral-200">{value}</div>
+      {sub && <div className="text-xs text-neutral-500">{sub}</div>}
     </div>
   );
 }

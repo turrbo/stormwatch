@@ -10,7 +10,7 @@ export default function DailyForecast({ weather }) {
 
   return (
     <div className="glass-panel p-4 animate-slide-up">
-      <h3 className="text-sm font-medium text-slate-400 mb-3 px-1">10-Day Forecast</h3>
+      <h3 className="text-sm font-medium text-neutral-400 mb-3 px-1">10-Day Forecast</h3>
       <div className="space-y-1">
         {d.time.map((day, i) => {
           const info = getWeatherInfo(d.weather_code[i]);
@@ -27,13 +27,13 @@ export default function DailyForecast({ weather }) {
             <div key={day} className="rounded-xl overflow-hidden">
               <button
                 onClick={() => setExpanded(isExpanded ? null : i)}
-                className="w-full flex items-center gap-3 px-3 py-3 hover:bg-slate-700/30 transition-colors"
+                className="w-full flex items-center gap-3 px-3 py-3 hover:bg-neutral-700/30 transition-colors"
               >
-                <span className="text-sm text-slate-300 w-20 text-left">
+                <span className="text-sm text-neutral-300 w-20 text-left">
                   {formatDayName(day)}
-                  <span className="text-xs text-slate-600 ml-1">{formatFullDate(day)}</span>
+                  <span className="text-xs text-neutral-600 ml-1">{formatFullDate(day)}</span>
                 </span>
-                <WeatherIcon name={info.icon} size={20} className="text-slate-300 shrink-0" />
+                <WeatherIcon name={info.icon} size={20} className="text-neutral-300 shrink-0" />
                 {d.precipitation_probability_max[i] > 0 && (
                   <span className="flex items-center gap-0.5 text-xs text-red-400 w-10">
                     <Droplets size={10} />{d.precipitation_probability_max[i]}%
@@ -43,17 +43,17 @@ export default function DailyForecast({ weather }) {
                 <span className={`text-sm font-medium w-10 text-right ${getTempClass(minTemp)}`}>
                   {formatTemp(minTemp)}
                 </span>
-                <div className="flex-1 h-1.5 bg-slate-800 rounded-full relative mx-1 min-w-[60px]">
+                <div className="flex-1 h-1.5 bg-neutral-800 rounded-full relative mx-1 min-w-[60px]">
                   <div className="absolute h-full rounded-full"
                     style={{
                       left: `${barLeft}%`, width: `${Math.max(barWidth, 4)}%`,
-                      background: `linear-gradient(90deg, #60a5fa, #f97316)`,
+                      background: `linear-gradient(90deg, #ef4444, #f97316)`,
                     }} />
                 </div>
                 <span className={`text-sm font-semibold w-10 text-left ${getTempClass(maxTemp)}`}>
                   {formatTemp(maxTemp)}
                 </span>
-                {isExpanded ? <ChevronUp size={14} className="text-slate-500" /> : <ChevronDown size={14} className="text-slate-500" />}
+                {isExpanded ? <ChevronUp size={14} className="text-neutral-500" /> : <ChevronDown size={14} className="text-neutral-500" />}
               </button>
 
               {isExpanded && (
@@ -79,11 +79,11 @@ export default function DailyForecast({ weather }) {
 function MiniStat({ icon: Icon, label, value }) {
   return (
     <div className="glass-panel-light p-2">
-      <div className="flex items-center gap-1 text-slate-500 text-[10px] mb-0.5">
+      <div className="flex items-center gap-1 text-neutral-500 text-[10px] mb-0.5">
         {Icon && <Icon size={10} />}
         <span>{label}</span>
       </div>
-      <div className="text-xs font-medium text-slate-300">{value}</div>
+      <div className="text-xs font-medium text-neutral-300">{value}</div>
     </div>
   );
 }

@@ -1,22 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-slate-850: #172033;
-  --color-slate-925: #0c1322;
-  --color-accent: #3b82f6;
-  --color-accent-glow: #60a5fa;
+  --color-accent: #C8102E;
+  --color-accent-glow: #DA1931;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #334155 transparent;
+  scrollbar-color: #404040 transparent;
 }
 
 body {
   margin: 0;
-  background: #0a0f1a;
-  color: #e2e8f0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1a1a1a;
+  color: #e5e5e5;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
@@ -28,29 +26,29 @@ body {
 }
 
 .glass-panel {
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(32, 32, 32, 0.85);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(64, 64, 64, 0.5);
   border-radius: 16px;
 }
 
 .glass-panel-light {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(41, 41, 41, 0.6);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(71, 85, 105, 0.3);
+  border: 1px solid rgba(80, 80, 80, 0.3);
   border-radius: 12px;
 }
 
 .glow-text {
-  text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+  text-shadow: 0 0 20px rgba(200, 16, 46, 0.5);
 }
 
 .glow-border {
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.15), inset 0 0 15px rgba(59, 130, 246, 0.05);
+  box-shadow: 0 0 15px rgba(200, 16, 46, 0.15), inset 0 0 15px rgba(200, 16, 46, 0.05);
 }
 
 .weather-gradient {
-  background: linear-gradient(135deg, #0a0f1a 0%, #1e293b 50%, #0f172a 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #292929 50%, #1f1f1f 100%);
 }
 
 .temp-warm { color: #fb923c; }
@@ -93,27 +91,27 @@ body {
   background: transparent;
 }
 .hourly-scroll::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #404040;
   border-radius: 2px;
 }
 
 .leaflet-container {
-  background: #0a0f1a !important;
+  background: #1a1a1a !important;
   border-radius: 16px;
 }
 
 .leaflet-control-zoom a {
-  background: rgba(15, 23, 42, 0.9) !important;
+  background: rgba(32, 32, 32, 0.9) !important;
   color: #e2e8f0 !important;
-  border-color: rgba(51, 65, 85, 0.5) !important;
+  border-color: rgba(64, 64, 64, 0.5) !important;
 }
 
 .leaflet-control-attribution {
-  background: rgba(15, 23, 42, 0.7) !important;
-  color: #64748b !important;
+  background: rgba(32, 32, 32, 0.7) !important;
+  color: #77777A !important;
   font-size: 10px !important;
 }
 
 .leaflet-control-attribution a {
-  color: #64748b !important;
+  color: #77777A !important;
 }

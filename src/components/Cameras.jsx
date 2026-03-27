@@ -52,7 +52,7 @@ function TypeBadge({ type }) {
   if (!type || type === 'city' || type === 'beach' || type === 'weather' || type === 'airport') return null;
   const Icon = TYPE_ICONS[type] || Camera;
   return (
-    <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-700/50 text-slate-400">
+    <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-neutral-700/50 text-neutral-400">
       <Icon size={10} /> {type}
     </span>
   );
@@ -70,7 +70,7 @@ function DotCamImage({ src, label }) {
     <img
       src={`${src}${src.includes('?') ? '&' : '?'}t=${tick}`}
       alt={label}
-      className="w-full h-full object-cover bg-slate-900"
+      className="w-full h-full object-cover bg-neutral-900"
       loading="lazy"
       onError={(e) => { e.target.style.opacity = '0.3'; }}
     />
@@ -105,20 +105,20 @@ export default function Cameras() {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Camera size={16} className="text-purple-400" />
-            <span className="text-sm font-medium text-slate-200">{cam?.label}</span>
-            <span className="text-xs text-slate-500">
+            <span className="text-sm font-medium text-neutral-200">{cam?.label}</span>
+            <span className="text-xs text-neutral-500">
               {isYt ? cam?.city : cam?.sourceLabel}
             </span>
           </div>
           <button
             onClick={() => { setExpanded(null); setExpandedType(null); }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
-              bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50 transition-all"
+              bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50 transition-all"
           >
             <Minimize2 size={13} /> Back to Grid
           </button>
         </div>
-        <div className="rounded-2xl overflow-hidden border border-slate-700/50"
+        <div className="rounded-2xl overflow-hidden border border-neutral-700/50"
           style={{ height: 'calc(100vh - 210px)', minHeight: 450 }}>
           {isYt ? (
             <iframe
@@ -133,7 +133,7 @@ export default function Cameras() {
           )}
         </div>
         {!isYt && (
-          <p className="text-[11px] text-slate-500 mt-2 text-center flex items-center justify-center gap-1">
+          <p className="text-[11px] text-neutral-500 mt-2 text-center flex items-center justify-center gap-1">
             <RefreshCw size={10} /> Image refreshes every 8 seconds
           </p>
         )}
@@ -149,15 +149,15 @@ export default function Cameras() {
           <Camera size={20} className="text-purple-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Live Cameras</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Live Cameras</h3>
+          <p className="text-sm text-neutral-500">
             {YT_CAMERAS.length} live streams + {totalDotCams} DOT cams across {DOT_KEYS.length} states
           </p>
         </div>
       </div>
 
       {/* Tab switcher */}
-      <div className="flex items-center gap-2 border-b border-slate-700/50 pb-2">
+      <div className="flex items-center gap-2 border-b border-neutral-700/50 pb-2">
         {TABS.map(t => (
           <button
             key={t}
@@ -165,7 +165,7 @@ export default function Cameras() {
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
               ${tab === t
                 ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-lg shadow-purple-500/5'
-                : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200 hover:bg-slate-700/40'}`}
+                : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200 hover:bg-neutral-700/40'}`}
           >
             {t === 'Live Streams' ? <Video size={14} /> : <Camera size={14} />}
             {t}
@@ -184,7 +184,7 @@ export default function Cameras() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${ytRegion === r
                     ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
-                    : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
               >
                 {r}
                 {r !== 'All' && (
@@ -219,15 +219,15 @@ export default function Cameras() {
                 </div>
                 <div className="px-3 py-2 flex items-center gap-2">
                   <MapPin size={11} className="text-purple-400 shrink-0" />
-                  <span className="text-xs font-medium text-slate-300 truncate">{cam.label}</span>
+                  <span className="text-xs font-medium text-neutral-300 truncate">{cam.label}</span>
                   <TypeBadge type={cam.type} />
-                  <span className="text-[10px] text-slate-500 ml-auto shrink-0">{cam.city}</span>
+                  <span className="text-[10px] text-neutral-500 ml-auto shrink-0">{cam.city}</span>
                 </div>
               </div>
             ))}
           </div>
 
-          <p className="text-[11px] text-slate-600 text-center">
+          <p className="text-[11px] text-neutral-600 text-center">
             Live feeds via YouTube -- streams maintained by third-party broadcasters
           </p>
         </>
@@ -243,7 +243,7 @@ export default function Cameras() {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                 ${dotFilter === 'All'
                   ? 'bg-red-500/20 text-red-300 border border-red-500/40'
-                  : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
+                  : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
             >
               All States
             </button>
@@ -254,7 +254,7 @@ export default function Cameras() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${dotFilter === k
                     ? 'bg-red-500/20 text-red-300 border border-red-500/40'
-                    : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
               >
                 {DOT_SOURCES[k].label}
                 <span className="ml-1 text-[10px] opacity-60">({DOT_SOURCES[k].cameras.length})</span>
@@ -276,7 +276,7 @@ export default function Cameras() {
                 className="glass-panel overflow-hidden group cursor-pointer hover:border-red-500/30 transition-all"
                 onClick={() => { setExpanded(cam.id); setExpandedType('dot'); }}
               >
-                <div className="relative bg-slate-900" style={{ height: 170 }}>
+                <div className="relative bg-neutral-900" style={{ height: 170 }}>
                   <DotCamImage src={cam.imageUrl} label={cam.label} />
                   <button
                     className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white/80
@@ -291,16 +291,16 @@ export default function Cameras() {
                 </div>
                 <div className="px-3 py-2 flex items-center gap-2">
                   <MapPin size={11} className="text-red-400 shrink-0" />
-                  <span className="text-xs font-medium text-slate-300 truncate">{cam.label}</span>
+                  <span className="text-xs font-medium text-neutral-300 truncate">{cam.label}</span>
                   {cam.area && (
-                    <span className="text-[10px] text-slate-500 ml-auto shrink-0">{cam.area}</span>
+                    <span className="text-[10px] text-neutral-500 ml-auto shrink-0">{cam.area}</span>
                   )}
                 </div>
               </div>
             ))}
           </div>
 
-          <p className="text-[11px] text-slate-600 text-center">
+          <p className="text-[11px] text-neutral-600 text-center">
             Feeds from state DOT traffic monitoring systems -- public camera data
           </p>
         </>

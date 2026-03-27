@@ -26,8 +26,8 @@ export default function ModelsView() {
           <BarChart3 size={20} className="text-emerald-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">NWP Models</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">NWP Models</h3>
+          <p className="text-sm text-neutral-500">
             Model maps from Tropical Tidbits + Pivotal Weather + SpotWX
           </p>
         </div>
@@ -44,7 +44,7 @@ export default function ModelsView() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all
               ${source === s.id
                 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200'}`}>
             {s.label}
           </button>
         ))}
@@ -73,7 +73,7 @@ export default function ModelsView() {
         <SpotWXView />
       )}
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         NWP model data from Tropical Tidbits, Pivotal Weather, and SpotWX
       </p>
     </div>
@@ -88,13 +88,13 @@ function TropicalTidbitsView({ model, setModel, product, setProduct, region, set
     <div className="space-y-3">
       {/* Model */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <Layers size={13} className="text-slate-500" />
+        <Layers size={13} className="text-neutral-500" />
         {TT_MODEL_KEYS.map(m => (
           <button key={m} onClick={() => setModel(m)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${model === m
                 ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {MODELS[m].label}
           </button>
         ))}
@@ -102,13 +102,13 @@ function TropicalTidbitsView({ model, setModel, product, setProduct, region, set
 
       {/* Product */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <BarChart3 size={13} className="text-slate-500" />
+        <BarChart3 size={13} className="text-neutral-500" />
         {TT_PRODUCT_KEYS.map(p => (
           <button key={p} onClick={() => setProduct(p)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${product === p
                 ? 'bg-purple-500/25 text-purple-300 border border-purple-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {PRODUCTS[p]}
           </button>
         ))}
@@ -116,13 +116,13 @@ function TropicalTidbitsView({ model, setModel, product, setProduct, region, set
 
       {/* Region */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <MapPin size={13} className="text-slate-500" />
+        <MapPin size={13} className="text-neutral-500" />
         {TT_REGION_KEYS.map(r => (
           <button key={r} onClick={() => setRegion(r)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${region === r
                 ? 'bg-red-500/25 text-red-300 border border-red-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {REGIONS[r]}
           </button>
         ))}
@@ -137,16 +137,16 @@ function TropicalTidbitsView({ model, setModel, product, setProduct, region, set
 
       {/* Inline NOAA model products as preview */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-300">
+        <div className="px-4 py-3 border-b border-neutral-700/30 flex items-center justify-between">
+          <span className="text-sm font-medium text-neutral-300">
             NOAA WPC -- National Forecast Chart (inline preview)
           </span>
           <button onClick={() => setImgKey(k => k + 1)}
-            className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200 transition-colors">
+            className="flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-200 transition-colors">
             <RefreshCw size={11} /> Refresh
           </button>
         </div>
-        <div className="relative bg-slate-900">
+        <div className="relative bg-neutral-900">
           <img
             key={imgKey}
             src={`https://www.wpc.ncep.noaa.gov/NationalForecastChart/staticimages/noaaforecast-day1.png?t=${Date.now()}-${imgKey}`}
@@ -159,7 +159,7 @@ function TropicalTidbitsView({ model, setModel, product, setProduct, region, set
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="glass-panel overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+          <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
             Surface Analysis (current)
           </div>
           <img
@@ -170,7 +170,7 @@ function TropicalTidbitsView({ model, setModel, product, setProduct, region, set
           />
         </div>
         <div className="glass-panel overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+          <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
             Day 1 QPF (24h Precip)
           </div>
           <img
@@ -191,39 +191,39 @@ function PivotalWeatherView({ pvModel, setPvModel, pvProduct, setPvProduct, pvSe
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-1.5 flex-wrap">
-        <Layers size={13} className="text-slate-500" />
+        <Layers size={13} className="text-neutral-500" />
         {Object.keys(PV_MODELS).map(m => (
           <button key={m} onClick={() => setPvModel(m)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${pvModel === m
                 ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {PV_MODELS[m].label}
           </button>
         ))}
       </div>
 
       <div className="flex items-center gap-1.5 flex-wrap">
-        <BarChart3 size={13} className="text-slate-500" />
+        <BarChart3 size={13} className="text-neutral-500" />
         {Object.keys(PV_PRODUCTS).map(p => (
           <button key={p} onClick={() => setPvProduct(p)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${pvProduct === p
                 ? 'bg-purple-500/25 text-purple-300 border border-purple-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {PV_PRODUCTS[p]}
           </button>
         ))}
       </div>
 
       <div className="flex items-center gap-1.5 flex-wrap">
-        <MapPin size={13} className="text-slate-500" />
+        <MapPin size={13} className="text-neutral-500" />
         {Object.keys(PV_SECTORS).map(s => (
           <button key={s} onClick={() => setPvSector(s)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${pvSector === s
                 ? 'bg-red-500/25 text-red-300 border border-red-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {PV_SECTORS[s]}
           </button>
         ))}
@@ -238,7 +238,7 @@ function PivotalWeatherView({ pvModel, setPvModel, pvProduct, setPvProduct, pvSe
       {/* NOAA model previews */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="glass-panel overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+          <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
             National Forecast Day 2
           </div>
           <img
@@ -249,7 +249,7 @@ function PivotalWeatherView({ pvModel, setPvModel, pvProduct, setPvProduct, pvSe
           />
         </div>
         <div className="glass-panel overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+          <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
             National Forecast Day 3
           </div>
           <img
@@ -291,7 +291,7 @@ function SpotWXView() {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${selModel === m.id
                 ? 'bg-amber-500/25 text-amber-300 border border-amber-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {m.label}
           </button>
         ))}

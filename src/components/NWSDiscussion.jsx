@@ -61,8 +61,8 @@ export default function NWSDiscussion({ location }) {
           <Building2 size={20} className="text-red-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">NWS Forecast Office</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">NWS Forecast Office</h3>
+          <p className="text-sm text-neutral-500">
             {wfo ? `WFO: ${wfo}` : 'Loading...'} -- Official forecast discussion and nearby ASOS/AWOS stations
           </p>
         </div>
@@ -74,14 +74,14 @@ export default function NWSDiscussion({ location }) {
           className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
             ${tab === 'discussion'
               ? 'bg-red-500/20 text-red-300 border border-red-500/40'
-              : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200'}`}>
+              : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200'}`}>
           <FileText size={14} /> Forecast Discussion
         </button>
         <button onClick={() => setTab('stations')}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
             ${tab === 'stations'
               ? 'bg-red-500/20 text-red-300 border border-red-500/40'
-              : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200'}`}>
+              : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200'}`}>
           <Radio size={14} /> ASOS/AWOS Stations
         </button>
       </div>
@@ -89,7 +89,7 @@ export default function NWSDiscussion({ location }) {
       {loading ? (
         <div className="glass-panel p-8 text-center">
           <Building2 size={32} className="text-red-400/50 mx-auto mb-2 animate-pulse" />
-          <p className="text-sm text-slate-500">Fetching NWS data...</p>
+          <p className="text-sm text-neutral-500">Fetching NWS data...</p>
         </div>
       ) : (
         <>
@@ -97,11 +97,11 @@ export default function NWSDiscussion({ location }) {
           {tab === 'discussion' && (
             <div className="glass-panel p-4">
               {discussion ? (
-                <pre className="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed font-mono max-h-[65vh] overflow-y-auto">
+                <pre className="text-xs text-neutral-300 whitespace-pre-wrap leading-relaxed font-mono max-h-[65vh] overflow-y-auto">
                   {discussion}
                 </pre>
               ) : (
-                <p className="text-sm text-slate-500">No forecast discussion available.</p>
+                <p className="text-sm text-neutral-500">No forecast discussion available.</p>
               )}
             </div>
           )}
@@ -117,35 +117,35 @@ export default function NWSDiscussion({ location }) {
                     onClick={() => loadObs(s.id)}>
                     <div className="flex items-center justify-between mb-2">
                       <div>
-                        <span className="text-sm font-semibold text-slate-200">{s.id}</span>
-                        <p className="text-xs text-slate-500">{s.name}</p>
+                        <span className="text-sm font-semibold text-neutral-200">{s.id}</span>
+                        <p className="text-xs text-neutral-500">{s.name}</p>
                       </div>
                       <MapPin size={14} className="text-red-400" />
                     </div>
                     {obs ? (
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         <div className="text-xs">
-                          <span className="text-slate-500">Temp: </span>
+                          <span className="text-neutral-500">Temp: </span>
                           <span className="text-orange-400 font-medium">{cToF(obs.temperature?.value)}°F</span>
                         </div>
                         <div className="text-xs">
-                          <span className="text-slate-500">Dew: </span>
+                          <span className="text-neutral-500">Dew: </span>
                           <span className="text-red-400 font-medium">{cToF(obs.dewpoint?.value)}°F</span>
                         </div>
                         <div className="text-xs">
-                          <span className="text-slate-500">Wind: </span>
-                          <span className="text-slate-300 font-medium">{mpsToMph(obs.windSpeed?.value)} mph</span>
+                          <span className="text-neutral-500">Wind: </span>
+                          <span className="text-neutral-300 font-medium">{mpsToMph(obs.windSpeed?.value)} mph</span>
                         </div>
                         <div className="text-xs">
-                          <span className="text-slate-500">Humidity: </span>
-                          <span className="text-slate-300 font-medium">{obs.relativeHumidity?.value?.toFixed(0) || '--'}%</span>
+                          <span className="text-neutral-500">Humidity: </span>
+                          <span className="text-neutral-300 font-medium">{obs.relativeHumidity?.value?.toFixed(0) || '--'}%</span>
                         </div>
                         {obs.textDescription && (
-                          <div className="col-span-2 text-xs text-slate-400">{obs.textDescription}</div>
+                          <div className="col-span-2 text-xs text-neutral-400">{obs.textDescription}</div>
                         )}
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-500 italic">Click to load observation</p>
+                      <p className="text-xs text-neutral-500 italic">Click to load observation</p>
                     )}
                   </div>
                 );
@@ -155,7 +155,7 @@ export default function NWSDiscussion({ location }) {
         </>
       )}
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Official NWS data via api.weather.gov -- authoritative US weather information
       </p>
     </div>

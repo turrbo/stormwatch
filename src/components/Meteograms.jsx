@@ -58,8 +58,8 @@ export default function Meteograms({ location }) {
           <LineChartIcon size={20} className="text-pink-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Meteograms</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Meteograms</h3>
+          <p className="text-sm text-neutral-500">
             Multi-model forecast charts for {location?.name || 'your location'}
           </p>
         </div>
@@ -67,48 +67,48 @@ export default function Meteograms({ location }) {
 
       {/* Open-Meteo hourly chart */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-300">
+        <div className="px-4 py-3 border-b border-neutral-700/30 flex items-center justify-between">
+          <span className="text-sm font-medium text-neutral-300">
             7-Day Hourly Forecast (Open-Meteo)
           </span>
         </div>
         <div className="p-4">
           {loading ? (
             <div className="h-64 flex items-center justify-center">
-              <p className="text-sm text-slate-500 animate-pulse">Loading forecast data...</p>
+              <p className="text-sm text-neutral-500 animate-pulse">Loading forecast data...</p>
             </div>
           ) : chartData.length === 0 ? (
             <div className="h-64 flex items-center justify-center">
-              <p className="text-sm text-slate-500">No forecast data available</p>
+              <p className="text-sm text-neutral-500">No forecast data available</p>
             </div>
           ) : (
             <div className="space-y-6">
               {/* Temperature + Precip chart */}
               <div>
-                <h4 className="text-xs font-medium text-slate-400 mb-2">Temperature (F) + Precipitation (in)</h4>
+                <h4 className="text-xs font-medium text-neutral-400 mb-2">Temperature (F) + Precipitation (in)</h4>
                 <ResponsiveContainer width="100%" height={220}>
                   <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#64748b' }} interval={7} angle={-30} textAnchor="end" height={50} />
-                    <YAxis yAxisId="temp" tick={{ fontSize: 10, fill: '#64748b' }} />
-                    <YAxis yAxisId="precip" orientation="right" tick={{ fontSize: 10, fill: '#64748b' }} />
-                    <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
+                    <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#737373' }} interval={7} angle={-30} textAnchor="end" height={50} />
+                    <YAxis yAxisId="temp" tick={{ fontSize: 10, fill: '#737373' }} />
+                    <YAxis yAxisId="precip" orientation="right" tick={{ fontSize: 10, fill: '#737373' }} />
+                    <Tooltip contentStyle={{ background: '#262626', border: '1px solid #404040', borderRadius: 8, fontSize: 12 }} />
                     <Legend wrapperStyle={{ fontSize: 11 }} />
                     <Line yAxisId="temp" type="monotone" dataKey="temp" stroke="#f97316" strokeWidth={2} dot={false} name="Temp (F)" />
-                    <Line yAxisId="precip" type="monotone" dataKey="precip" stroke="#3b82f6" strokeWidth={1.5} dot={false} name="Precip (in)" />
+                    <Line yAxisId="precip" type="monotone" dataKey="precip" stroke="#C8102E" strokeWidth={1.5} dot={false} name="Precip (in)" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
 
               {/* Wind + Humidity chart */}
               <div>
-                <h4 className="text-xs font-medium text-slate-400 mb-2">Wind Speed (mph) + Humidity (%)</h4>
+                <h4 className="text-xs font-medium text-neutral-400 mb-2">Wind Speed (mph) + Humidity (%)</h4>
                 <ResponsiveContainer width="100%" height={180}>
                   <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#64748b' }} interval={7} angle={-30} textAnchor="end" height={50} />
-                    <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
-                    <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
+                    <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#737373' }} interval={7} angle={-30} textAnchor="end" height={50} />
+                    <YAxis tick={{ fontSize: 10, fill: '#737373' }} />
+                    <Tooltip contentStyle={{ background: '#262626', border: '1px solid #404040', borderRadius: 8, fontSize: 12 }} />
                     <Legend wrapperStyle={{ fontSize: 11 }} />
                     <Line type="monotone" dataKey="wind" stroke="#22d3ee" strokeWidth={2} dot={false} name="Wind (mph)" />
                     <Line type="monotone" dataKey="humidity" stroke="#a78bfa" strokeWidth={1.5} dot={false} name="Humidity (%)" />
@@ -122,16 +122,16 @@ export default function Meteograms({ location }) {
 
       {/* Windy.com animated map */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-300">Animated Model Map (Windy / ECMWF)</span>
+        <div className="px-4 py-3 border-b border-neutral-700/30 flex items-center justify-between">
+          <span className="text-sm font-medium text-neutral-300">Animated Model Map (Windy / ECMWF)</span>
         </div>
-        <div className="flex items-center gap-1.5 flex-wrap px-4 py-2 border-b border-slate-700/20">
+        <div className="flex items-center gap-1.5 flex-wrap px-4 py-2 border-b border-neutral-700/20">
           {OVERLAY_KEYS.map(o => (
             <button key={o} onClick={() => setOverlay(o)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                 ${overlay === o
                   ? 'bg-pink-500/25 text-pink-300 border border-pink-500/50'
-                  : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                  : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
               {WINDY_OVERLAYS[o].label}
             </button>
           ))}
@@ -154,7 +154,7 @@ export default function Meteograms({ location }) {
         View 17-Model Comparison on Meteoblue
       </a>
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Forecast data from Open-Meteo + animated maps from Windy.com (ECMWF) + Meteoblue multi-model
       </p>
     </div>

@@ -61,8 +61,8 @@ export default function HistoricalWeather({ location }) {
           <History size={20} className="text-violet-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Historical Weather</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Historical Weather</h3>
+          <p className="text-sm text-neutral-500">
             Open-Meteo archive data back to 1940 for {location?.name || 'your location'}
           </p>
         </div>
@@ -74,14 +74,14 @@ export default function HistoricalWeather({ location }) {
           className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
             ${mode === 'thisday'
               ? 'bg-violet-500/20 text-violet-300 border border-violet-500/40'
-              : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200'}`}>
+              : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200'}`}>
           <Calendar size={14} /> This Day in History
         </button>
         <button onClick={() => setMode('range')}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
             ${mode === 'range'
               ? 'bg-violet-500/20 text-violet-300 border border-violet-500/40'
-              : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200'}`}>
+              : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200'}`}>
           <TrendingUp size={14} /> Date Range
         </button>
       </div>
@@ -92,25 +92,25 @@ export default function HistoricalWeather({ location }) {
           {loading ? (
             <div className="glass-panel p-8 text-center">
               <History size={32} className="text-violet-400/50 mx-auto mb-2 animate-pulse" />
-              <p className="text-sm text-slate-500">Loading historical data...</p>
+              <p className="text-sm text-neutral-500">Loading historical data...</p>
             </div>
           ) : thisDayData.length > 0 ? (
             <>
               <div className="glass-panel p-4">
-                <h4 className="text-sm font-medium text-slate-400 mb-3">
+                <h4 className="text-sm font-medium text-neutral-400 mb-3">
                   {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} -- Last 10 Years
                 </h4>
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={thisDayData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="year" tick={{ fill: '#64748b', fontSize: 11 }} />
-                    <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
+                    <XAxis dataKey="year" tick={{ fill: '#737373', fontSize: 11 }} />
+                    <YAxis tick={{ fill: '#737373', fontSize: 11 }} />
                     <Tooltip
-                      contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
+                      contentStyle={{ background: '#171717', border: '1px solid #404040', borderRadius: 8 }}
                       labelStyle={{ color: '#94a3b8' }}
                     />
                     <Bar dataKey="tempMax" fill="#f97316" name="High" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="tempMin" fill="#60a5fa" name="Low" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="tempMin" fill="#ef4444" name="Low" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -118,7 +118,7 @@ export default function HistoricalWeather({ location }) {
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 {thisDayData.slice(-5).map(d => (
                   <div key={d.year} className="glass-panel-light p-3 text-center">
-                    <div className="text-xs text-slate-500 mb-1">{d.year}</div>
+                    <div className="text-xs text-neutral-500 mb-1">{d.year}</div>
                     <div className="text-sm font-semibold text-orange-400">{d.tempMax?.toFixed(0)}°</div>
                     <div className="text-sm font-semibold text-red-400">{d.tempMin?.toFixed(0)}°</div>
                     {d.precip > 0 && (
@@ -132,7 +132,7 @@ export default function HistoricalWeather({ location }) {
               </div>
             </>
           ) : (
-            <div className="glass-panel p-6 text-center text-sm text-slate-500">
+            <div className="glass-panel p-6 text-center text-sm text-neutral-500">
               No historical data available for this date.
             </div>
           )}
@@ -144,14 +144,14 @@ export default function HistoricalWeather({ location }) {
         <div className="space-y-3">
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500">From</label>
+              <label className="text-xs text-neutral-500">From</label>
               <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
-                className="bg-slate-800 border border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-slate-200" />
+                className="bg-neutral-800 border border-neutral-600/50 rounded-lg px-3 py-1.5 text-sm text-neutral-200" />
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500">To</label>
+              <label className="text-xs text-neutral-500">To</label>
               <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
-                className="bg-slate-800 border border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-slate-200" />
+                className="bg-neutral-800 border border-neutral-600/50 rounded-lg px-3 py-1.5 text-sm text-neutral-200" />
             </div>
             <button onClick={loadRange}
               className="px-4 py-1.5 rounded-lg text-sm font-medium bg-violet-500/20 text-violet-300 border border-violet-500/40 hover:bg-violet-500/30 transition-all">
@@ -162,44 +162,44 @@ export default function HistoricalWeather({ location }) {
           {loading && (
             <div className="glass-panel p-8 text-center">
               <TrendingUp size={32} className="text-violet-400/50 mx-auto mb-2 animate-pulse" />
-              <p className="text-sm text-slate-500">Loading...</p>
+              <p className="text-sm text-neutral-500">Loading...</p>
             </div>
           )}
 
           {rangeChartData.length > 0 && (
             <>
               <div className="glass-panel p-4">
-                <h4 className="text-sm font-medium text-slate-400 mb-3 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-neutral-400 mb-3 flex items-center gap-1.5">
                   <Thermometer size={14} /> Temperature Range
                 </h4>
                 <ResponsiveContainer width="100%" height={250}>
                   <AreaChart data={rangeChartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 10 }}
+                    <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
+                    <XAxis dataKey="date" tick={{ fill: '#737373', fontSize: 10 }}
                       tickFormatter={(v) => v.slice(5)} interval="preserveStartEnd" />
-                    <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <YAxis tick={{ fill: '#737373', fontSize: 11 }} />
                     <Tooltip
-                      contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
+                      contentStyle={{ background: '#171717', border: '1px solid #404040', borderRadius: 8 }}
                       labelStyle={{ color: '#94a3b8' }}
                     />
                     <Area type="monotone" dataKey="high" stroke="#f97316" fill="#f97316" fillOpacity={0.15} name="High" />
-                    <Area type="monotone" dataKey="low" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.15} name="Low" />
+                    <Area type="monotone" dataKey="low" stroke="#ef4444" fill="#ef4444" fillOpacity={0.15} name="Low" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
 
               <div className="glass-panel p-4">
-                <h4 className="text-sm font-medium text-slate-400 mb-3">Precipitation</h4>
+                <h4 className="text-sm font-medium text-neutral-400 mb-3">Precipitation</h4>
                 <ResponsiveContainer width="100%" height={150}>
                   <BarChart data={rangeChartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 10 }}
+                    <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
+                    <XAxis dataKey="date" tick={{ fill: '#737373', fontSize: 10 }}
                       tickFormatter={(v) => v.slice(5)} interval="preserveStartEnd" />
-                    <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <YAxis tick={{ fill: '#737373', fontSize: 11 }} />
                     <Tooltip
-                      contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
+                      contentStyle={{ background: '#171717', border: '1px solid #404040', borderRadius: 8 }}
                     />
-                    <Bar dataKey="precip" fill="#3b82f6" name="Precip (in)" radius={[2, 2, 0, 0]} />
+                    <Bar dataKey="precip" fill="#C8102E" name="Precip (in)" radius={[2, 2, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -208,7 +208,7 @@ export default function HistoricalWeather({ location }) {
         </div>
       )}
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Historical data from Open-Meteo Archive (ERA5 reanalysis) -- available back to 1940
       </p>
     </div>

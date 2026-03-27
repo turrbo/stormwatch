@@ -93,8 +93,8 @@ export default function LightningMap({ location }) {
             <Zap size={20} className="text-yellow-400" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-slate-200">Lightning Map</h3>
-            <p className="text-sm text-slate-500">
+            <h3 className="text-lg font-semibold text-neutral-200">Lightning Map</h3>
+            <p className="text-sm text-neutral-500">
               Real-time global lightning detection via Blitzortung network
             </p>
           </div>
@@ -104,7 +104,7 @@ export default function LightningMap({ location }) {
           {/* Connection status */}
           <div className="flex items-center gap-1.5">
             <div className={`w-2 h-2 rounded-full ${connected ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-neutral-500">
               {connected ? 'Live' : 'Disconnected'}
             </span>
           </div>
@@ -123,20 +123,20 @@ export default function LightningMap({ location }) {
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
             ${mode === 'live'
               ? 'bg-yellow-500/25 text-yellow-300 border border-yellow-500/50'
-              : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+              : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
           <Radio size={13} /> Live Strikes
         </button>
         <button onClick={() => setMode('heatmap')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
             ${mode === 'heatmap'
               ? 'bg-yellow-500/25 text-yellow-300 border border-yellow-500/50'
-              : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+              : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
           <Clock size={13} /> 1h Heatmap
         </button>
       </div>
 
       {/* Map */}
-      <div className="rounded-2xl overflow-hidden border border-slate-700/50"
+      <div className="rounded-2xl overflow-hidden border border-neutral-700/50"
         style={{ height: 'calc(100vh - 280px)', minHeight: 450 }}>
         <MapContainer
           center={[lat, lon]}
@@ -154,7 +154,7 @@ export default function LightningMap({ location }) {
         </MapContainer>
       </div>
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Lightning data from Blitzortung.org community network -- non-commercial use only
       </p>
     </div>

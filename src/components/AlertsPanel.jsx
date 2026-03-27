@@ -9,8 +9,8 @@ export default function AlertsPanel({ alerts }) {
     return (
       <div className="glass-panel p-8 text-center animate-slide-up">
         <Shield size={48} className="text-green-500/50 mx-auto mb-3" />
-        <h3 className="text-lg font-medium text-slate-300">All Clear</h3>
-        <p className="text-sm text-slate-500 mt-1">No active weather alerts for this area.</p>
+        <h3 className="text-lg font-medium text-neutral-300">All Clear</h3>
+        <p className="text-sm text-neutral-500 mt-1">No active weather alerts for this area.</p>
       </div>
     );
   }
@@ -19,7 +19,7 @@ export default function AlertsPanel({ alerts }) {
     <div className="space-y-3 animate-slide-up">
       <div className="flex items-center gap-2 px-1">
         <AlertTriangle size={16} className="text-amber-400" />
-        <h3 className="text-sm font-medium text-slate-400">
+        <h3 className="text-sm font-medium text-neutral-400">
           {alerts.length} Active Alert{alerts.length !== 1 ? 's' : ''}
         </h3>
       </div>
@@ -41,9 +41,9 @@ export default function AlertsPanel({ alerts }) {
                     {alert.severity}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-2">{alert.headline}</p>
+                <p className="text-xs text-neutral-400 mt-1 line-clamp-2">{alert.headline}</p>
                 {alert.onset && (
-                  <div className="flex items-center gap-1 mt-1.5 text-[10px] text-slate-500">
+                  <div className="flex items-center gap-1 mt-1.5 text-[10px] text-neutral-500">
                     <Clock size={10} />
                     <span>
                       {new Date(alert.onset).toLocaleDateString()} - {new Date(alert.expires).toLocaleDateString()}
@@ -51,25 +51,25 @@ export default function AlertsPanel({ alerts }) {
                   </div>
                 )}
               </div>
-              {isExpanded ? <ChevronUp size={16} className="text-slate-500" /> : <ChevronDown size={16} className="text-slate-500" />}
+              {isExpanded ? <ChevronUp size={16} className="text-neutral-500" /> : <ChevronDown size={16} className="text-neutral-500" />}
             </button>
             {isExpanded && (
               <div className="px-4 pb-4 animate-fade-in">
-                <div className="border-t border-slate-700/30 pt-3">
+                <div className="border-t border-neutral-700/30 pt-3">
                   {alert.description && (
                     <div className="mb-3">
-                      <h4 className="text-xs font-medium text-slate-400 mb-1">Description</h4>
-                      <p className="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed">{alert.description}</p>
+                      <h4 className="text-xs font-medium text-neutral-400 mb-1">Description</h4>
+                      <p className="text-xs text-neutral-300 whitespace-pre-wrap leading-relaxed">{alert.description}</p>
                     </div>
                   )}
                   {alert.instruction && (
                     <div>
-                      <h4 className="text-xs font-medium text-slate-400 mb-1">Instructions</h4>
-                      <p className="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed">{alert.instruction}</p>
+                      <h4 className="text-xs font-medium text-neutral-400 mb-1">Instructions</h4>
+                      <p className="text-xs text-neutral-300 whitespace-pre-wrap leading-relaxed">{alert.instruction}</p>
                     </div>
                   )}
                   {alert.senderName && (
-                    <p className="text-[10px] text-slate-600 mt-2">Source: {alert.senderName}</p>
+                    <p className="text-[10px] text-neutral-600 mt-2">Source: {alert.senderName}</p>
                   )}
                 </div>
               </div>

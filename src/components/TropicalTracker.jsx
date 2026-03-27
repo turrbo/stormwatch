@@ -42,8 +42,8 @@ export default function TropicalTracker() {
           <CloudLightning size={20} className="text-red-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Tropical Tracker</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Tropical Tracker</h3>
+          <p className="text-sm text-neutral-500">
             NHC tropical outlooks + GOES satellite imagery for tropical basins
           </p>
         </div>
@@ -51,18 +51,18 @@ export default function TropicalTracker() {
 
       {/* Basin selector */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <Globe size={13} className="text-slate-500" />
+        <Globe size={13} className="text-neutral-500" />
         {BASINS.map(b => (
           <button key={b.id} onClick={() => setBasin(b.id)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${basin === b.id
                 ? 'bg-red-500/25 text-red-300 border border-red-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {b.label}
           </button>
         ))}
         <button onClick={() => setImgKey(k => k + 1)}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto flex items-center gap-1">
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 transition-all ml-auto flex items-center gap-1">
           <RefreshCw size={11} /> Refresh
         </button>
       </div>
@@ -74,7 +74,7 @@ export default function TropicalTracker() {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${outlookType === key
                 ? 'bg-orange-500/25 text-orange-300 border border-orange-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {val.label}
           </button>
         ))}
@@ -82,8 +82,8 @@ export default function TropicalTracker() {
 
       {/* NHC Tropical Outlook Image */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-300">
+        <div className="px-4 py-3 border-b border-neutral-700/30 flex items-center justify-between">
+          <span className="text-sm font-medium text-neutral-300">
             NHC {NHC_PRODUCTS[outlookType]?.label} -- {BASINS.find(b => b.id === basin)?.label}
           </span>
           <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener noreferrer"
@@ -91,7 +91,7 @@ export default function TropicalTracker() {
             <ExternalLink size={11} /> NHC
           </a>
         </div>
-        <div className="relative bg-slate-900">
+        <div className="relative bg-neutral-900">
           <img
             key={`outlook-${imgKey}`}
             src={`${outlookUrl}?t=${Date.now()}-${imgKey}`}
@@ -104,22 +104,22 @@ export default function TropicalTracker() {
 
       {/* GOES Satellite imagery */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center gap-2">
+        <div className="px-4 py-3 border-b border-neutral-700/30 flex items-center gap-2">
           <SatIcon size={14} className="text-cyan-400" />
-          <span className="text-sm font-medium text-slate-300">GOES Tropical Satellite -- GeoColor</span>
+          <span className="text-sm font-medium text-neutral-300">GOES Tropical Satellite -- GeoColor</span>
         </div>
-        <div className="flex items-center gap-1.5 flex-wrap px-4 py-2 border-b border-slate-700/20">
+        <div className="flex items-center gap-1.5 flex-wrap px-4 py-2 border-b border-neutral-700/20">
           {GOES_SECTOR_KEYS.map(s => (
             <button key={s} onClick={() => setGoesSector(s)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                 ${goesSector === s
                   ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/50'
-                  : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                  : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
               {GOES_SECTORS[s].label}
             </button>
           ))}
         </div>
-        <div className="relative bg-slate-900">
+        <div className="relative bg-neutral-900">
           <img
             key={`goes-${goesSector}-${imgKey}`}
             src={`${goesUrl}?t=${Date.now()}-${imgKey}`}
@@ -137,7 +137,7 @@ export default function TropicalTracker() {
         View Active Tropical Systems on Tropical Tidbits
       </a>
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Tropical data from NOAA National Hurricane Center + GOES satellite imagery
       </p>
     </div>

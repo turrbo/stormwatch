@@ -25,16 +25,16 @@ export default function HourlyForecast({ weather }) {
 
   return (
     <div className="glass-panel p-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-      <h3 className="text-sm font-medium text-slate-400 mb-3 px-1">24-Hour Forecast</h3>
+      <h3 className="text-sm font-medium text-neutral-400 mb-3 px-1">24-Hour Forecast</h3>
       <div className="flex gap-1 overflow-x-auto hourly-scroll pb-2">
         {hours.map((h, i) => {
           const info = getWeatherInfo(h.code);
           const tempClass = getTempClass(h.temp);
           return (
             <div key={i} className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl
-              hover:bg-slate-700/30 transition-colors shrink-0 min-w-[60px]">
-              <span className="text-xs text-slate-500">{formatHour(h.time)}</span>
-              <WeatherIcon name={info.icon} size={20} isDay={!!h.isDay} className="text-slate-300" />
+              hover:bg-neutral-700/30 transition-colors shrink-0 min-w-[60px]">
+              <span className="text-xs text-neutral-500">{formatHour(h.time)}</span>
+              <WeatherIcon name={info.icon} size={20} isDay={!!h.isDay} className="text-neutral-300" />
               <span className={`text-sm font-semibold ${tempClass}`}>{formatTemp(h.temp)}</span>
               {h.precip > 0 && (
                 <span className="flex items-center gap-0.5 text-[10px] text-red-400">

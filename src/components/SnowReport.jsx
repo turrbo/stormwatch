@@ -63,8 +63,8 @@ export default function SnowReport() {
           <Snowflake size={20} className="text-sky-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Snow Report</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Snow Report</h3>
+          <p className="text-sm text-neutral-500">
             NOAA snow analysis + ski resort conditions
           </p>
         </div>
@@ -77,7 +77,7 @@ export default function SnowReport() {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${product === key
                 ? 'bg-sky-500/25 text-sky-300 border border-sky-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {val.label}
           </button>
         ))}
@@ -85,31 +85,31 @@ export default function SnowReport() {
 
       {/* Region selector */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <MapPin size={13} className="text-slate-500" />
+        <MapPin size={13} className="text-neutral-500" />
         {SNOW_REGIONS.map(r => (
           <button key={r.id} onClick={() => setRegion(r.id)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${region === r.id
                 ? 'bg-red-500/25 text-red-300 border border-red-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {r.label}
           </button>
         ))}
         <button onClick={() => setImgKey(k => k + 1)}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto flex items-center gap-1">
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 transition-all ml-auto flex items-center gap-1">
           <RefreshCw size={11} /> Refresh
         </button>
       </div>
 
       {/* Snow analysis image */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30">
-          <span className="text-sm font-medium text-slate-300">
+        <div className="px-4 py-3 border-b border-neutral-700/30">
+          <span className="text-sm font-medium text-neutral-300">
             NOAA NOHRSC -- {SNOW_PRODUCTS[product]?.label} -- {SNOW_REGIONS.find(r => r.id === region)?.label}
           </span>
-          <p className="text-xs text-slate-500 mt-0.5">{SNOW_PRODUCTS[product]?.desc}</p>
+          <p className="text-xs text-neutral-500 mt-0.5">{SNOW_PRODUCTS[product]?.desc}</p>
         </div>
-        <div className="relative bg-slate-900">
+        <div className="relative bg-neutral-900">
           <img
             key={`snow-${product}-${region}-${imgKey}`}
             src={`${getSnowImageUrl(product, region)}?t=${Date.now()}-${imgKey}`}
@@ -127,26 +127,26 @@ export default function SnowReport() {
       {/* WPC Winter products */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="glass-panel overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+          <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
             WPC Winter Storm Severity Index
           </div>
           <img
             key={`wssi-${imgKey}`}
             src={`https://www.wpc.ncep.noaa.gov/wwd/wssi/wssi_main_day1.png?t=${Date.now()}`}
             alt="Winter Storm Severity Index"
-            className="w-full h-auto bg-slate-800"
+            className="w-full h-auto bg-neutral-800"
             onError={(e) => { e.target.style.opacity = '0.3'; }}
           />
         </div>
         <div className="glass-panel overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+          <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
             Snow Probability (24h)
           </div>
           <img
             key={`sprob-${imgKey}`}
             src={`https://www.wpc.ncep.noaa.gov/wwd/pwpf_d12/images/gifd2/PWPF_SNW24_D2.gif?t=${Date.now()}`}
             alt="Snow Probability 24h"
-            className="w-full h-auto bg-slate-800"
+            className="w-full h-auto bg-neutral-800"
             onError={(e) => { e.target.style.opacity = '0.3'; }}
           />
         </div>
@@ -154,26 +154,26 @@ export default function SnowReport() {
 
       {/* Ski resort links */}
       <div className="glass-panel overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center gap-2">
+        <div className="px-4 py-3 border-b border-neutral-700/30 flex items-center gap-2">
           <Mountain size={14} className="text-sky-400" />
-          <span className="text-sm font-medium text-slate-300">Ski Resort Conditions</span>
+          <span className="text-sm font-medium text-neutral-300">Ski Resort Conditions</span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 p-3">
           {POPULAR_RESORTS.map(resort => (
             <a key={resort.name} href={resort.url} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-slate-800/60 border border-slate-700/30 hover:border-sky-500/30 hover:bg-slate-800 transition-all group">
+              className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-neutral-800/60 border border-neutral-700/30 hover:border-sky-500/30 hover:bg-neutral-800 transition-all group">
               <Mountain size={14} className="text-sky-400/50 group-hover:text-sky-400 shrink-0" />
               <div className="min-w-0">
-                <div className="text-xs font-medium text-slate-300 truncate">{resort.name}</div>
-                <div className="text-[10px] text-slate-500">{resort.state}</div>
+                <div className="text-xs font-medium text-neutral-300 truncate">{resort.name}</div>
+                <div className="text-[10px] text-neutral-500">{resort.state}</div>
               </div>
-              <ExternalLink size={10} className="text-slate-600 ml-auto shrink-0" />
+              <ExternalLink size={10} className="text-neutral-600 ml-auto shrink-0" />
             </a>
           ))}
         </div>
       </div>
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Snow analysis from NOAA NOHRSC + WPC winter products -- resort links for current conditions
       </p>
     </div>

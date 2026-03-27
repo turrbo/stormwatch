@@ -46,8 +46,8 @@ export default function SurfaceAnalysis() {
           <Map size={20} className="text-teal-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Surface Analysis</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Surface Analysis</h3>
+          <p className="text-sm text-neutral-500">
             NOAA Weather Prediction Center -- fronts, QPF, ERO, winter products
           </p>
         </div>
@@ -62,13 +62,13 @@ export default function SurfaceAnalysis() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                 ${tab === t.id
                   ? 'bg-teal-500/25 text-teal-300 border border-teal-500/50'
-                  : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                  : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
               <Icon size={13} /> {t.label}
             </button>
           );
         })}
         <button onClick={() => setImgKey(Date.now())}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto flex items-center gap-1">
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 transition-all ml-auto flex items-center gap-1">
           <RefreshCw size={11} /> Refresh
         </button>
       </div>
@@ -80,7 +80,7 @@ export default function SurfaceAnalysis() {
             key={`sfc-${imgKey}`}
             src={`${SURFACE_ANALYSIS.current}?t=${imgKey}`}
             alt="Current Surface Analysis"
-            className="w-full h-auto bg-slate-800"
+            className="w-full h-auto bg-neutral-800"
             style={{ minHeight: 300 }}
             onError={(e) => { e.target.style.opacity = '0.3'; e.target.alt = 'Surface analysis image unavailable -- try refreshing'; }}
           />
@@ -96,7 +96,7 @@ export default function SurfaceAnalysis() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${qpfSel === k
                     ? 'bg-red-500/25 text-red-300 border border-red-500/50'
-                    : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
                 {v}
               </button>
             ))}
@@ -106,7 +106,7 @@ export default function SurfaceAnalysis() {
               key={`qpf-${qpfSel}-${imgKey}`}
               src={`${QPF_PRODUCTS[qpfSel]}?t=${imgKey}`}
               alt={`QPF - ${QPF_LABELS[qpfSel]}`}
-              className="w-full h-auto bg-slate-800"
+              className="w-full h-auto bg-neutral-800"
               style={{ minHeight: 300 }}
               onError={(e) => { e.target.style.opacity = '0.3'; }}
             />
@@ -123,7 +123,7 @@ export default function SurfaceAnalysis() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${natDay === d
                     ? 'bg-green-500/25 text-green-300 border border-green-500/50'
-                    : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
                 {d.replace('day', 'Day ')}
               </button>
             ))}
@@ -133,7 +133,7 @@ export default function SurfaceAnalysis() {
               key={`nat-${natDay}-${imgKey}`}
               src={`${NATIONAL_FORECAST[natDay]}?t=${imgKey}`}
               alt={`National Forecast ${natDay}`}
-              className="w-full h-auto bg-slate-800"
+              className="w-full h-auto bg-neutral-800"
               style={{ minHeight: 300 }}
               onError={(e) => { e.target.style.opacity = '0.3'; }}
             />
@@ -150,7 +150,7 @@ export default function SurfaceAnalysis() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${eroDay === d
                     ? 'bg-orange-500/25 text-orange-300 border border-orange-500/50'
-                    : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
                 {d.replace('day', 'Day ')}
               </button>
             ))}
@@ -160,7 +160,7 @@ export default function SurfaceAnalysis() {
               key={`ero-${eroDay}-${imgKey}`}
               src={`${ERO[eroDay]}?t=${imgKey}`}
               alt={`ERO ${eroDay}`}
-              className="w-full h-auto bg-slate-800"
+              className="w-full h-auto bg-neutral-800"
               style={{ minHeight: 300 }}
               onError={(e) => { e.target.style.opacity = '0.3'; }}
             />
@@ -173,17 +173,17 @@ export default function SurfaceAnalysis() {
         <div className="space-y-3">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="glass-panel overflow-hidden">
-              <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+              <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
                 Winter Storm Severity Index (WSSI)
               </div>
-              <img key={`wssi-${imgKey}`} src={`${WINTER_PRODUCTS.wssi}?t=${imgKey}`} alt="WSSI" className="w-full h-auto bg-slate-800"
+              <img key={`wssi-${imgKey}`} src={`${WINTER_PRODUCTS.wssi}?t=${imgKey}`} alt="WSSI" className="w-full h-auto bg-neutral-800"
                 onError={(e) => { e.target.style.opacity = '0.3'; }} />
             </div>
             <div className="glass-panel overflow-hidden">
-              <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+              <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
                 Snow Probability (24h)
               </div>
-              <img key={`snow24-${imgKey}`} src={`${WINTER_PRODUCTS.prob_snow_24}?t=${imgKey}`} alt="Snow Probability" className="w-full h-auto bg-slate-800"
+              <img key={`snow24-${imgKey}`} src={`${WINTER_PRODUCTS.prob_snow_24}?t=${imgKey}`} alt="Snow Probability" className="w-full h-auto bg-neutral-800"
                 onError={(e) => { e.target.style.opacity = '0.3'; }} />
             </div>
           </div>
@@ -199,16 +199,16 @@ export default function SurfaceAnalysis() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${discType === val
                     ? 'bg-teal-500/25 text-teal-300 border border-teal-500/50'
-                    : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
                 {key === 'shortRange' ? 'Short Range' : key === 'extended' ? 'Extended' : 'QPF'}
               </button>
             ))}
           </div>
           <div className="glass-panel p-4">
             {loadingDisc ? (
-              <div className="text-sm text-slate-500 animate-pulse">Loading discussion...</div>
+              <div className="text-sm text-neutral-500 animate-pulse">Loading discussion...</div>
             ) : (
-              <pre className="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed font-mono max-h-[60vh] overflow-y-auto">
+              <pre className="text-xs text-neutral-300 whitespace-pre-wrap leading-relaxed font-mono max-h-[60vh] overflow-y-auto">
                 {discussion}
               </pre>
             )}
@@ -216,7 +216,7 @@ export default function SurfaceAnalysis() {
         </div>
       )}
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Products from NOAA Weather Prediction Center (WPC) -- public US government data
       </p>
     </div>

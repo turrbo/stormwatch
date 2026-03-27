@@ -55,8 +55,8 @@ export default function VentuskyMap({ location }) {
           <Globe size={20} className="text-orange-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Weather Maps</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Weather Maps</h3>
+          <p className="text-sm text-neutral-500">
             Animated global weather visualization -- Windy.com + 40+ models
           </p>
         </div>
@@ -64,13 +64,13 @@ export default function VentuskyMap({ location }) {
 
       {/* Model selector */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <span className="text-[10px] text-slate-500 uppercase tracking-wide">Model</span>
+        <span className="text-[10px] text-neutral-500 uppercase tracking-wide">Model</span>
         {MODEL_KEYS.map(m => (
           <button key={m} onClick={() => switchModel(m)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${model === m
                 ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {WINDY_MODELS[m]}
           </button>
         ))}
@@ -78,20 +78,20 @@ export default function VentuskyMap({ location }) {
 
       {/* Layer selector */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <Layers size={13} className="text-slate-500" />
+        <Layers size={13} className="text-neutral-500" />
         {LAYER_KEYS.map(l => (
           <button key={l} onClick={() => switchLayer(l)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${layer === l
                 ? 'bg-orange-500/25 text-orange-300 border border-orange-500/50'
-                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+                : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
             {WINDY_LAYERS[l]}
           </button>
         ))}
       </div>
 
       {/* Map embed -- Windy has proper embed support with no app banner */}
-      <div className="rounded-2xl overflow-hidden border border-slate-700/50"
+      <div className="rounded-2xl overflow-hidden border border-neutral-700/50"
         style={{ height: 'calc(100vh - 300px)', minHeight: 500 }}>
         <iframe
           key={iframeKey}
@@ -110,7 +110,7 @@ export default function VentuskyMap({ location }) {
         Open in Ventusky (alternative view)
       </a>
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Interactive weather maps from Windy.com -- ECMWF, GFS, ICON, HRRR and 36+ models
       </p>
     </div>

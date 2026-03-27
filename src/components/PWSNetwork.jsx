@@ -49,8 +49,8 @@ export default function PWSNetwork({ location }) {
           <Radio size={20} className="text-green-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-slate-200">Personal Weather Stations</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="text-lg font-semibold text-neutral-200">Personal Weather Stations</h3>
+          <p className="text-sm text-neutral-500">
             Hyper-local data from Weather Underground citizen stations near {location?.name || 'you'}
           </p>
         </div>
@@ -59,12 +59,12 @@ export default function PWSNetwork({ location }) {
       {loading ? (
         <div className="glass-panel p-8 text-center">
           <Radio size={32} className="text-green-400/50 mx-auto mb-2 animate-pulse" />
-          <p className="text-sm text-slate-500">Finding nearby stations...</p>
+          <p className="text-sm text-neutral-500">Finding nearby stations...</p>
         </div>
       ) : stations.length === 0 ? (
         <div className="glass-panel p-8 text-center">
-          <Radio size={32} className="text-slate-600 mx-auto mb-2" />
-          <p className="text-sm text-slate-500">No personal weather stations found nearby.</p>
+          <Radio size={32} className="text-neutral-600 mx-auto mb-2" />
+          <p className="text-sm text-neutral-500">No personal weather stations found nearby.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -77,14 +77,14 @@ export default function PWSNetwork({ location }) {
                 onClick={() => { setExpanded(expanded === s.stationId ? null : s.stationId); loadStationData(s.stationId); }}>
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h4 className="text-sm font-semibold text-slate-200">{s.stationId}</h4>
-                    <p className="text-xs text-slate-500">
+                    <h4 className="text-sm font-semibold text-neutral-200">{s.stationId}</h4>
+                    <p className="text-xs text-neutral-500">
                       {s.neighborhood || s.city}{s.state ? `, ${s.state}` : ''}
                     </p>
                   </div>
                   <div className="text-right">
                     {s.distanceMi != null && (
-                      <span className="text-[10px] text-slate-500">{s.distanceMi.toFixed(1)} mi</span>
+                      <span className="text-[10px] text-neutral-500">{s.distanceMi.toFixed(1)} mi</span>
                     )}
                   </div>
                 </div>
@@ -92,7 +92,7 @@ export default function PWSNetwork({ location }) {
                 {imp ? (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-1 text-xs text-slate-500">
+                      <span className="flex items-center gap-1 text-xs text-neutral-500">
                         <Thermometer size={11} /> Temp
                       </span>
                       <span className="text-lg font-semibold text-orange-400">{imp.temp != null ? `${imp.temp}°F` : '--'}</span>
@@ -112,13 +112,13 @@ export default function PWSNetwork({ location }) {
                       )}
                     </div>
                     {data.obsTimeLocal && (
-                      <p className="text-[10px] text-slate-600 mt-1">
+                      <p className="text-[10px] text-neutral-600 mt-1">
                         Updated: {new Date(data.obsTimeLocal).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     )}
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <div className="flex items-center gap-2 text-xs text-neutral-500">
                     <RefreshCw size={12} className="animate-spin" />
                     <span>Loading...</span>
                   </div>
@@ -129,7 +129,7 @@ export default function PWSNetwork({ location }) {
         </div>
       )}
 
-      <p className="text-[11px] text-slate-600 text-center">
+      <p className="text-[11px] text-neutral-600 text-center">
         Personal weather station data from Weather Underground -- tens of thousands of citizen stations
       </p>
     </div>
@@ -139,10 +139,10 @@ export default function PWSNetwork({ location }) {
 function MiniPWSStat({ icon: Icon, label, value }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="flex items-center gap-1 text-[10px] text-slate-500">
+      <span className="flex items-center gap-1 text-[10px] text-neutral-500">
         {Icon && <Icon size={10} />} {label}
       </span>
-      <span className="text-xs font-medium text-slate-300">{value}</span>
+      <span className="text-xs font-medium text-neutral-300">{value}</span>
     </div>
   );
 }

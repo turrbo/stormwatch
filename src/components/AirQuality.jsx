@@ -8,8 +8,8 @@ export default function AirQuality({ airQuality, weather }) {
   if (!aq) {
     return (
       <div className="glass-panel p-8 text-center animate-slide-up">
-        <Wind size={48} className="text-slate-600 mx-auto mb-3" />
-        <p className="text-sm text-slate-500">Air quality data unavailable for this location.</p>
+        <Wind size={48} className="text-neutral-600 mx-auto mb-3" />
+        <p className="text-sm text-neutral-500">Air quality data unavailable for this location.</p>
       </div>
     );
   }
@@ -26,12 +26,12 @@ export default function AirQuality({ airQuality, weather }) {
             <span className="text-2xl font-bold" style={{ color: aqiLevel.color }}>{aq.us_aqi}</span>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-slate-200">Air Quality Index</h3>
+            <h3 className="text-lg font-semibold text-neutral-200">Air Quality Index</h3>
             <p className="text-sm font-medium" style={{ color: aqiLevel.color }}>{aqiLevel.label}</p>
           </div>
         </div>
 
-        <div className="w-full h-2 rounded-full bg-slate-800 mb-4 overflow-hidden">
+        <div className="w-full h-2 rounded-full bg-neutral-800 mb-4 overflow-hidden">
           <div className="h-full rounded-full transition-all duration-700"
             style={{
               width: `${Math.min(100, (aq.us_aqi / 300) * 100)}%`,
@@ -62,20 +62,20 @@ export default function AirQuality({ airQuality, weather }) {
               <Sun size={28} style={{ color: uvLevel.color }} />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-slate-200">UV Index</h3>
+              <h3 className="text-lg font-semibold text-neutral-200">UV Index</h3>
               <p className="text-sm font-medium" style={{ color: uvLevel.color }}>
                 {uvMax.toFixed(1)} - {uvLevel.label}
               </p>
             </div>
           </div>
-          <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+          <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden">
             <div className="h-full rounded-full transition-all duration-700"
               style={{
                 width: `${Math.min(100, (uvMax / 11) * 100)}%`,
                 background: 'linear-gradient(90deg, #22c55e, #eab308, #f97316, #ef4444, #a855f7)',
               }} />
           </div>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-neutral-500 mt-2">
             {uvMax >= 8 ? 'Wear sunscreen, hat, and sunglasses. Avoid midday sun.' :
              uvMax >= 6 ? 'Wear sunscreen and protective clothing.' :
              uvMax >= 3 ? 'Moderate risk. Wear sunscreen.' :
@@ -90,12 +90,12 @@ export default function AirQuality({ airQuality, weather }) {
 function PollutantCard({ label, value, unit, icon: Icon, quality }) {
   return (
     <div className="glass-panel-light p-3">
-      <div className="flex items-center gap-1.5 text-slate-500 text-xs mb-1">
+      <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-1">
         {Icon && <Icon size={12} />}
         <span>{label}</span>
       </div>
-      <div className="text-sm font-semibold text-slate-200">
-        {value ?? 'N/A'} <span className="text-xs text-slate-500 font-normal">{unit}</span>
+      <div className="text-sm font-semibold text-neutral-200">
+        {value ?? 'N/A'} <span className="text-xs text-neutral-500 font-normal">{unit}</span>
       </div>
     </div>
   );
