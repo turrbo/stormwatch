@@ -55,10 +55,10 @@ export default function Header({
             style={{ backgroundColor: '#C8102E' }}>
             <span className="text-white text-xl font-bold leading-none">E</span>
           </div>
-          <div className="hidden sm:block">
-            <h1 className="text-white text-xl font-bold leading-none"
+          <div>
+            <h1 className="text-white text-lg sm:text-xl font-bold leading-none"
               style={{ letterSpacing: '1.5px' }}>EOC</h1>
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Emergency Operation Center</p>
+            <p className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Emergency Operation Center</p>
           </div>
         </div>
 
