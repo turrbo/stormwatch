@@ -1,19 +1,14 @@
 // NOAA NDBC BuoyCAM data
-// Source: https://www.ndbc.noaa.gov/buoycams.php (no CORS, pre-fetched)
-// Images: https://www.ndbc.noaa.gov/images/buoycam/{CODE}_{YYYY}_{MM}_{DD}_{HHMM}.jpg
+// Source: https://www.ndbc.noaa.gov/buoycams.php (pre-fetched station list)
+// Image endpoint: https://www.ndbc.noaa.gov/buoycam.php?station={ID}
+//   - Serves latest JPEG directly (200, content-type: image/jpeg)
+//   - No auth, no CORS issues for <img> tags
 // Panoramic images (2880x300), update ~hourly during daylight
-// 77 buoys with cameras across Atlantic, Gulf, Pacific, Alaska, Hawaii
+// 57 buoys with cameras across Atlantic, Gulf, Pacific, Alaska, Hawaii
 
-// Build image URL based on current time (try current hour, fallback to previous)
-export function buildBuoyImageUrl(imgCode, hoursAgo = 0) {
-  const now = new Date(Date.now() - hoursAgo * 3600000);
-  const y = now.getUTCFullYear();
-  const m = String(now.getUTCMonth() + 1).padStart(2, '0');
-  const d = String(now.getUTCDate()).padStart(2, '0');
-  // Round to nearest 10-minute mark
-  const h = String(now.getUTCHours()).padStart(2, '0');
-  const min = String(Math.floor(now.getUTCMinutes() / 10) * 10).padStart(2, '0');
-  return `https://www.ndbc.noaa.gov/images/buoycam/${imgCode}_${y}_${m}_${d}_${h}${min}.jpg`;
+// Get latest buoy camera image URL (serves JPEG directly, always current)
+export function buoyImageUrl(stationId) {
+  return `https://www.ndbc.noaa.gov/buoycam.php?station=${stationId}`;
 }
 
 // Regions for filtering

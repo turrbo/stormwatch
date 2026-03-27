@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Camera, Maximize2, Minimize2, MapPin, Train, Radio, Waves, Video, RefreshCw, Plane, Anchor, Loader2 } from 'lucide-react';
+import { Camera, Maximize2, Minimize2, MapPin, Train, Radio, Waves, Video, RefreshCw, Plane, Anchor } from 'lucide-react';
 import { DOT_SOURCES } from '../services/dotCameras';
 import { FAA_SITES, FAA_BY_STATE, FAA_STATE_KEYS, STATE_NAMES, faaImageUrl, faaLiveUrl } from '../services/faaWeatherCams';
-import { BUOY_STATIONS, BUOY_REGIONS, buildBuoyImageUrl } from '../services/noaaBuoyCams';
+import { BUOY_STATIONS, BUOY_REGIONS, buoyImageUrl } from '../services/noaaBuoyCams';
 
 // ── YouTube Live streams ──────────────────────────────────────────────
 const YT_CAMERAS = [
@@ -121,47 +121,18 @@ function FaaCamCard({ site, onExpand }) {
   );
 }
 
-// ── NOAA Buoy Camera Card ──
+// ── NOAA Buoy Camera Card (direct image from buoycam.php) ──
 function BuoyCamCard({ buoy, onExpand }) {
-  const [imgUrl, setImgUrl] = useState(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    // Try current hour, then -1h, -2h, -3h
-    let cancelled = false;
-    const tryLoad = (hoursAgo) => {
-      if (hoursAgo > 3 || cancelled) { setError(true); return; }
-      const url = buildBuoyImageUrl(buoy.imgCode, hoursAgo);
-      const img = new Image();
-      img.onload = () => { if (!cancelled) setImgUrl(url); };
-      img.onerror = () => tryLoad(hoursAgo + 1);
-      img.src = url;
-    };
-    tryLoad(0);
-    return () => { cancelled = true; };
-  }, [buoy.imgCode]);
+  const imgUrl = buoyImageUrl(buoy.id);
 
   return (
     <div
       className="glass-panel overflow-hidden group cursor-pointer hover:border-red-500/30 transition-all"
-      onClick={() => imgUrl && onExpand(buoy, imgUrl)}
+      onClick={() => onExpand(buoy, imgUrl)}
     >
       <div className="relative bg-neutral-900" style={{ height: 100 }}>
-        {!imgUrl && !error && (
-          <div className="w-full h-full flex items-center justify-center">
-            <Loader2 size={16} className="text-neutral-500 animate-spin" />
-          </div>
-        )}
-        {error && (
-          <div className="w-full h-full flex flex-col items-center justify-center text-neutral-600 gap-1">
-            <Anchor size={16} />
-            <span className="text-[10px]">No image</span>
-          </div>
-        )}
-        {imgUrl && (
-          <img src={imgUrl} alt={buoy.name} className="w-full h-full object-cover" loading="lazy"
-            onError={(e) => { e.target.style.opacity = '0.3'; }} />
-        )}
+        <img src={imgUrl} alt={buoy.name} className="w-full h-full object-cover" loading="lazy"
+          onError={(e) => { e.target.style.opacity = '0.3'; }} />
         <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-black/60 text-cyan-300">
           {buoy.id}
         </span>
