@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { reverseGeocode } from '../services/geocodingApi';
 
-const STORAGE_KEY = 'commandcenter_locations';
-const ACTIVE_KEY = 'commandcenter_active_location';
+const STORAGE_KEY = 'theeoc_locations';
+const ACTIVE_KEY = 'theeoc_active_location';
 
 function loadSaved() {
   try {

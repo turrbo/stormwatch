@@ -1,6 +1,6 @@
 // weather.gov NWS - Enhanced API (adds forecast discussions, stations, marine)
 const BASE = 'https://api.weather.gov';
-const HEADERS = { 'User-Agent': 'CommandCenter Weather App (github.com/turrbo)' };
+const HEADERS = { 'User-Agent': 'TheEOC Weather App (github.com/turrbo)' };
 
 export async function fetchPoint(lat, lon) {
   const res = await fetch(`${BASE}/points/${lat.toFixed(4)},${lon.toFixed(4)}`, { headers: HEADERS });

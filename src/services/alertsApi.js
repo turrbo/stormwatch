@@ -3,7 +3,7 @@ const NWS_BASE = 'https://api.weather.gov';
 export async function fetchAlerts(lat, lon) {
   const point = `${Number(lat).toFixed(4)},${Number(lon).toFixed(4)}`;
   const res = await fetch(`${NWS_BASE}/alerts/active?point=${point}`, {
-    headers: { 'User-Agent': 'CommandCenter Weather App' },
+    headers: { 'User-Agent': 'TheEOC Weather App' },
   });
   if (!res.ok) return [];
   const data = await res.json();
