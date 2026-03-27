@@ -1,25 +1,16 @@
 import { useState } from 'react';
-import { Satellite, Globe, Eye } from 'lucide-react';
-import { SAT_BANDS, SAT_SECTORS, getSatelliteImageUrl } from '../services/codNexlabApi';
+import { Satellite, Globe, Eye, RefreshCw, Layers } from 'lucide-react';
+import { SAT_BANDS, SAT_SCALES, SAT_SECTORS, getSatelliteImageUrl } from '../services/codNexlabApi';
 
 const BAND_KEYS = Object.keys(SAT_BANDS);
 const SECTOR_KEYS = Object.keys(SAT_SECTORS);
-const GOES_SATS = [
-  { id: 'goes16', label: 'GOES-East (16)' },
-  { id: 'goes18', label: 'GOES-West (18)' },
-];
 
 export default function SatelliteView() {
-  const [sat, setSat] = useState('goes16');
   const [sector, setSector] = useState('conus');
-  const [band, setBand] = useState('truecolor');
+  const [band, setBand] = useState('13');
   const [imgKey, setImgKey] = useState(0);
 
-  // COD uses the band id in the URL path, and count=1 means "latest 1 frame"
-  const bandId = SAT_BANDS[band]?.id || 'geocolor';
-  const imgUrl = getSatelliteImageUrl(sat, sector, bandId, 1);
-
-  const refreshImage = () => setImgKey(k => k + 1);
+  const imgUrl = getSatelliteImageUrl('continental', sector, band);
 
   return (
     <div className="space-y-4 animate-slide-up">
@@ -31,44 +22,28 @@ export default function SatelliteView() {
         <div>
           <h3 className="text-lg font-semibold text-slate-200">Satellite Imagery</h3>
           <p className="text-sm text-slate-500">
-            GOES satellite imagery via COD NEXLAB + Zoom Earth global view
+            GOES-East/West imagery via COD NEXLAB
           </p>
         </div>
       </div>
 
-      {/* Controls row */}
-      <div className="flex flex-wrap gap-3">
-        {/* Satellite selector */}
-        <div className="flex items-center gap-1.5">
-          <Globe size={13} className="text-slate-500" />
-          {GOES_SATS.map(s => (
-            <button key={s.id} onClick={() => setSat(s.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
-                ${sat === s.id
-                  ? 'bg-indigo-500/25 text-indigo-300 border border-indigo-500/50'
-                  : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
-              {s.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Band selector */}
-        <div className="flex items-center gap-1.5">
-          <Eye size={13} className="text-slate-500" />
-          {BAND_KEYS.map(b => (
-            <button key={b} onClick={() => setBand(b)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
-                ${band === b
-                  ? 'bg-purple-500/25 text-purple-300 border border-purple-500/50'
-                  : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
-              {SAT_BANDS[b].label}
-            </button>
-          ))}
-        </div>
+      {/* Band selector */}
+      <div className="flex items-center gap-1.5 flex-wrap">
+        <Eye size={13} className="text-slate-500" />
+        {BAND_KEYS.map(b => (
+          <button key={b} onClick={() => setBand(b)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+              ${band === b
+                ? 'bg-purple-500/25 text-purple-300 border border-purple-500/50'
+                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+            {SAT_BANDS[b].label}
+          </button>
+        ))}
       </div>
 
       {/* Sector selector */}
       <div className="flex items-center gap-1.5 flex-wrap">
+        <Layers size={13} className="text-slate-500" />
         {SECTOR_KEYS.map(s => (
           <button key={s} onClick={() => setSector(s)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
@@ -78,50 +53,49 @@ export default function SatelliteView() {
             {SAT_SECTORS[s]}
           </button>
         ))}
-        <button onClick={refreshImage}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto">
-          Refresh
+        <button onClick={() => setImgKey(k => k + 1)}
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto flex items-center gap-1">
+          <RefreshCw size={11} /> Refresh
         </button>
       </div>
 
-      {/* COD NEXLAB image */}
+      {/* Satellite image */}
       <div className="glass-panel overflow-hidden">
         <div className="relative bg-slate-900" style={{ minHeight: 400 }}>
           <img
             key={`${imgUrl}-${imgKey}`}
-            src={`${imgUrl}?t=${imgKey}`}
+            src={`${imgUrl}?t=${Date.now()}-${imgKey}`}
             alt={`${SAT_BANDS[band]?.label} - ${SAT_SECTORS[sector]}`}
             className="w-full h-auto"
             onError={(e) => {
-              e.target.alt = 'Image unavailable - try a different band or sector';
+              e.target.alt = 'Image unavailable -- try a different band or sector';
               e.target.style.opacity = '0.3';
             }}
           />
         </div>
         <div className="px-4 py-2 border-t border-slate-700/30 text-xs text-slate-500">
-          COD NEXLAB -- {GOES_SATS.find(s => s.id === sat)?.label} / {SAT_BANDS[band]?.label} / {SAT_SECTORS[sector]}
+          COD NEXLAB -- GOES / {SAT_BANDS[band]?.label} / {SAT_SECTORS[sector]} -- latest image
         </div>
       </div>
 
-      {/* Zoom Earth global view */}
+      {/* NOAA GOES direct imagery as backup */}
       <div className="glass-panel overflow-hidden">
         <div className="px-4 py-3 border-b border-slate-700/30 flex items-center gap-2">
           <Globe size={14} className="text-cyan-400" />
-          <span className="text-sm font-medium text-slate-300">Zoom Earth -- Global True Color</span>
+          <span className="text-sm font-medium text-slate-300">NOAA GOES-East -- GeoColor CONUS</span>
         </div>
-        <div style={{ height: 500 }}>
-          <iframe
-            src="https://zoom.earth/#view=39,-98,4z/layers=wind"
-            className="w-full h-full border-0"
-            title="Zoom Earth Global Satellite"
-            allow="fullscreen"
-            allowFullScreen
+        <div className="relative bg-slate-900">
+          <img
+            src={`https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/1250x750.jpg?t=${Date.now()}`}
+            alt="NOAA GOES-East GeoColor"
+            className="w-full h-auto"
+            onError={(e) => { e.target.style.opacity = '0.3'; }}
           />
         </div>
       </div>
 
       <p className="text-[11px] text-slate-600 text-center">
-        GOES satellite data from College of DuPage NEXLAB -- Global imagery from Zoom Earth
+        Satellite data from College of DuPage NEXLAB + NOAA GOES imagery
       </p>
     </div>
   );

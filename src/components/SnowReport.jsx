@@ -1,42 +1,59 @@
-import { useState, useEffect } from 'react';
-import { Snowflake, Mountain, Search, AlertTriangle, TrendingUp } from 'lucide-react';
-import { POPULAR_RESORTS, fetchSnowSummary, searchResorts } from '../services/opensnowApi';
+import { useState } from 'react';
+import { Snowflake, Mountain, RefreshCw, ExternalLink, MapPin } from 'lucide-react';
+
+// NOAA NOHRSC Snow Model regions that return valid images
+const SNOW_REGIONS = [
+  { id: 'National', label: 'National' },
+  { id: 'Northwest', label: 'Northwest' },
+  { id: 'Northeast', label: 'Northeast' },
+  { id: 'Sierra_Nevada', label: 'Sierra Nevada' },
+];
+
+const SNOW_PRODUCTS = {
+  nsm_depth: { label: 'Snow Depth', desc: 'Current modeled snow depth' },
+  nsm_swe: { label: 'Snow Water Equiv.', desc: 'Snow water equivalent' },
+};
+
+// Generate today's date in YYYYMMDD05 format for NOHRSC URLs
+function getNohrscDate() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}${m}${day}05`;
+}
+
+function getNohrscYM() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  return `${y}${m}`;
+}
+
+function getSnowImageUrl(product, region) {
+  return `https://www.nohrsc.noaa.gov/snow_model/images/full/${region}/${product}/${getNohrscYM()}/${product}_${getNohrscDate()}_${region}.jpg`;
+}
+
+// Popular ski resorts with direct links
+const POPULAR_RESORTS = [
+  { name: 'Vail', state: 'CO', url: 'https://www.vail.com/the-mountain/mountain-conditions/snow-and-weather-report' },
+  { name: 'Park City', state: 'UT', url: 'https://www.parkcitymountain.com/the-mountain/mountain-conditions/snow-and-weather-report' },
+  { name: 'Mammoth Mountain', state: 'CA', url: 'https://www.mammothmountain.com/mountain-information/mountain-conditions' },
+  { name: 'Jackson Hole', state: 'WY', url: 'https://www.jacksonhole.com/mountain-report' },
+  { name: 'Big Sky', state: 'MT', url: 'https://bigskyresort.com/conditions' },
+  { name: 'Steamboat', state: 'CO', url: 'https://www.steamboat.com/the-mountain/mountain-report' },
+  { name: 'Killington', state: 'VT', url: 'https://www.killington.com/conditions-weather' },
+  { name: 'Alta', state: 'UT', url: 'https://www.alta.com/conditions' },
+  { name: 'Telluride', state: 'CO', url: 'https://www.tellurideskiresort.com/the-mountain/conditions/' },
+  { name: 'Aspen Snowmass', state: 'CO', url: 'https://www.aspensnowmass.com/our-mountains/conditions-report' },
+  { name: 'Palisades Tahoe', state: 'CA', url: 'https://www.palisadestahoe.com/mountain-information/conditions' },
+  { name: 'Snowbird', state: 'UT', url: 'https://www.snowbird.com/mountain-report/' },
+];
 
 export default function SnowReport() {
-  const [resorts, setResorts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [expanded, setExpanded] = useState(null);
-
-  useEffect(() => {
-    loadPopularResorts();
-  }, []);
-
-  async function loadPopularResorts() {
-    setLoading(true);
-    const results = await Promise.allSettled(
-      POPULAR_RESORTS.map(async (r) => {
-        try {
-          const data = await fetchSnowSummary(r.slug);
-          return { ...r, data };
-        } catch {
-          return { ...r, data: null };
-        }
-      })
-    );
-    setResorts(results.filter(r => r.status === 'fulfilled').map(r => r.value));
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    if (searchQuery.length < 2) { setSearchResults([]); return; }
-    const timer = setTimeout(async () => {
-      const results = await searchResorts(searchQuery);
-      setSearchResults(Array.isArray(results) ? results.slice(0, 8) : []);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+  const [region, setRegion] = useState('National');
+  const [product, setProduct] = useState('nsm_depth');
+  const [imgKey, setImgKey] = useState(0);
 
   return (
     <div className="space-y-4 animate-slide-up">
@@ -48,125 +65,117 @@ export default function SnowReport() {
         <div>
           <h3 className="text-lg font-semibold text-slate-200">Snow Report</h3>
           <p className="text-sm text-slate-500">
-            Ski resort conditions via OpenSnow -- snowfall, depth, and quality
+            NOAA snow analysis + ski resort conditions
           </p>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search ski resorts..."
-          className="w-full bg-slate-800/80 border border-slate-600/50 rounded-xl pl-9 pr-4 py-2.5 text-sm
-            text-slate-200 placeholder-slate-500 outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/25"
-        />
-        {searchResults.length > 0 && (
-          <div className="absolute top-full left-0 right-0 mt-1 glass-panel py-1 shadow-xl max-h-64 overflow-y-auto z-50">
-            {searchResults.map((r, i) => (
-              <button key={i}
-                className="w-full text-left px-3 py-2 hover:bg-slate-700/50 text-sm text-slate-300 transition-colors">
-                <Mountain size={12} className="inline mr-2 text-sky-400" />
-                {r.name || r.title || JSON.stringify(r).slice(0, 50)}
-              </button>
-            ))}
-          </div>
-        )}
+      {/* Snow product selector */}
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {Object.entries(SNOW_PRODUCTS).map(([key, val]) => (
+          <button key={key} onClick={() => setProduct(key)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+              ${product === key
+                ? 'bg-sky-500/25 text-sky-300 border border-sky-500/50'
+                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+            {val.label}
+          </button>
+        ))}
       </div>
 
-      {/* Resort grid */}
-      {loading ? (
-        <div className="glass-panel p-8 text-center">
-          <Snowflake size={32} className="text-sky-400/50 mx-auto mb-2 animate-spin" />
-          <p className="text-sm text-slate-500">Loading resort conditions...</p>
+      {/* Region selector */}
+      <div className="flex items-center gap-1.5 flex-wrap">
+        <MapPin size={13} className="text-slate-500" />
+        {SNOW_REGIONS.map(r => (
+          <button key={r.id} onClick={() => setRegion(r.id)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+              ${region === r.id
+                ? 'bg-blue-500/25 text-blue-300 border border-blue-500/50'
+                : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
+            {r.label}
+          </button>
+        ))}
+        <button onClick={() => setImgKey(k => k + 1)}
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto flex items-center gap-1">
+          <RefreshCw size={11} /> Refresh
+        </button>
+      </div>
+
+      {/* Snow analysis image */}
+      <div className="glass-panel overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-700/30">
+          <span className="text-sm font-medium text-slate-300">
+            NOAA NOHRSC -- {SNOW_PRODUCTS[product]?.label} -- {SNOW_REGIONS.find(r => r.id === region)?.label}
+          </span>
+          <p className="text-xs text-slate-500 mt-0.5">{SNOW_PRODUCTS[product]?.desc}</p>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {resorts.map((resort) => (
-            <ResortCard key={resort.slug} resort={resort} />
+        <div className="relative bg-slate-900">
+          <img
+            key={`snow-${product}-${region}-${imgKey}`}
+            src={`${getSnowImageUrl(product, region)}?t=${Date.now()}-${imgKey}`}
+            alt={`${SNOW_PRODUCTS[product]?.label} - ${region}`}
+            className="w-full h-auto"
+            style={{ minHeight: 300 }}
+            onError={(e) => {
+              e.target.style.opacity = '0.3';
+              e.target.alt = 'Snow image unavailable -- data may not be available for this date yet';
+            }}
+          />
+        </div>
+      </div>
+
+      {/* WPC Winter products */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="glass-panel overflow-hidden">
+          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+            WPC Winter Storm Severity Index
+          </div>
+          <img
+            key={`wssi-${imgKey}`}
+            src={`https://www.wpc.ncep.noaa.gov/wwd/wssi/wssi_main_day1.png?t=${Date.now()}`}
+            alt="Winter Storm Severity Index"
+            className="w-full h-auto bg-slate-800"
+            onError={(e) => { e.target.style.opacity = '0.3'; }}
+          />
+        </div>
+        <div className="glass-panel overflow-hidden">
+          <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
+            Snow Probability (24h)
+          </div>
+          <img
+            key={`sprob-${imgKey}`}
+            src={`https://www.wpc.ncep.noaa.gov/wwd/pwpf_d12/images/gifd2/PWPF_SNW24_D2.gif?t=${Date.now()}`}
+            alt="Snow Probability 24h"
+            className="w-full h-auto bg-slate-800"
+            onError={(e) => { e.target.style.opacity = '0.3'; }}
+          />
+        </div>
+      </div>
+
+      {/* Ski resort links */}
+      <div className="glass-panel overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-700/30 flex items-center gap-2">
+          <Mountain size={14} className="text-sky-400" />
+          <span className="text-sm font-medium text-slate-300">Ski Resort Conditions</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 p-3">
+          {POPULAR_RESORTS.map(resort => (
+            <a key={resort.name} href={resort.url} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-slate-800/60 border border-slate-700/30 hover:border-sky-500/30 hover:bg-slate-800 transition-all group">
+              <Mountain size={14} className="text-sky-400/50 group-hover:text-sky-400 shrink-0" />
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-slate-300 truncate">{resort.name}</div>
+                <div className="text-[10px] text-slate-500">{resort.state}</div>
+              </div>
+              <ExternalLink size={10} className="text-slate-600 ml-auto shrink-0" />
+            </a>
           ))}
         </div>
-      )}
-
-      <p className="text-[11px] text-slate-600 text-center">
-        Snow data from OpenSnow -- conditions may vary, check resort for latest updates
-      </p>
-    </div>
-  );
-}
-
-function ResortCard({ resort }) {
-  const d = resort.data;
-  const hasData = d && (d.snow_past_24h != null || d.snow_depth != null || d.snow_summary);
-
-  return (
-    <div className="glass-panel p-4 hover:border-sky-500/30 transition-all">
-      <div className="flex items-center justify-between mb-3">
-        <div>
-          <h4 className="text-sm font-semibold text-slate-200">{resort.name}</h4>
-          <p className="text-xs text-slate-500">{resort.state}</p>
-        </div>
-        <Mountain size={18} className="text-sky-400/50" />
       </div>
 
-      {hasData ? (
-        <div className="space-y-2">
-          {d.snow_past_24h != null && (
-            <StatRow label="24h Snowfall" value={`${d.snow_past_24h}"`} highlight={d.snow_past_24h > 6} />
-          )}
-          {d.snow_past_48h != null && (
-            <StatRow label="48h Snowfall" value={`${d.snow_past_48h}"`} />
-          )}
-          {d.snow_depth != null && (
-            <StatRow label="Snow Depth" value={`${d.snow_depth}"`} />
-          )}
-          {d.base_depth != null && (
-            <StatRow label="Base Depth" value={`${d.base_depth}"`} />
-          )}
-          {d.quality_rating != null && (
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-500">Quality</span>
-              <QualityBadge rating={d.quality_rating} />
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="text-xs text-slate-500 italic">
-          {d?.message || 'Data unavailable -- resort may be closed or API rate-limited'}
-        </div>
-      )}
+      <p className="text-[11px] text-slate-600 text-center">
+        Snow analysis from NOAA NOHRSC + WPC winter products -- resort links for current conditions
+      </p>
     </div>
-  );
-}
-
-function StatRow({ label, value, highlight = false }) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-xs text-slate-500">{label}</span>
-      <span className={`text-sm font-semibold ${highlight ? 'text-sky-300' : 'text-slate-300'}`}>
-        {highlight && <TrendingUp size={12} className="inline mr-1 text-sky-400" />}
-        {value}
-      </span>
-    </div>
-  );
-}
-
-function QualityBadge({ rating }) {
-  const colors = {
-    5: 'bg-sky-500/20 text-sky-300',
-    4: 'bg-green-500/20 text-green-300',
-    3: 'bg-yellow-500/20 text-yellow-300',
-    2: 'bg-orange-500/20 text-orange-300',
-    1: 'bg-red-500/20 text-red-300',
-  };
-  const labels = { 5: 'Epic', 4: 'Good', 3: 'Fair', 2: 'Poor', 1: 'Bad' };
-  const r = Math.round(rating);
-  return (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[r] || 'bg-slate-700 text-slate-400'}`}>
-      {labels[r] || `${rating}/5`}
-    </span>
   );
 }

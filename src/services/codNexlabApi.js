@@ -1,7 +1,38 @@
 // COD NEXLAB - NEXRAD radar + GOES satellite imagery
+// Correct URL pattern: https://weather.cod.edu/wxdata/satellite/{scale}/{sector}/current/{sector}.{band}.jpg
 const BASE = 'https://weather.cod.edu';
+const WXDATA = `${BASE}/wxdata`;
 
-// NEXRAD radar sites by region
+// GOES satellite bands
+export const SAT_BANDS = {
+  '13': { label: 'Infrared', id: '13' },
+  '02': { label: 'Visible', id: '02' },
+  '08': { label: 'Water Vapor', id: '08' },
+  airmass: { label: 'Airmass RGB', id: 'airmass' },
+  sandwich: { label: 'Sandwich', id: 'sandwich' },
+};
+
+export const SAT_SCALES = {
+  continental: 'Continental',
+  regional: 'Regional',
+};
+
+export const SAT_SECTORS = {
+  conus: 'CONUS',
+  ne: 'Northeast',
+  se: 'Southeast',
+  mw: 'Midwest',
+  sp: 'S. Plains',
+  nw: 'Northwest',
+  sw: 'Southwest',
+};
+
+// Returns the latest satellite image URL
+export function getSatelliteImageUrl(scale = 'continental', sector = 'conus', band = '13') {
+  return `${WXDATA}/satellite/${scale}/${sector}/current/${sector}.${band}.jpg`;
+}
+
+// NEXRAD radar
 export const RADAR_SITES = {
   KLOT: 'Chicago, IL',
   KOKX: 'New York, NY',
@@ -20,31 +51,6 @@ export const RADAR_SITES = {
   KVTX: 'Los Angeles, CA',
 };
 
-export function getRadarImageUrl(site, product = 'NCR', count = 1) {
-  return `${BASE}/data/${site}/${product}/${count}.jpg`;
+export function getRadarImageUrl(site, product = 'NCR') {
+  return `${WXDATA}/nexrad/${site}/${product}/current/${site}.${product}.jpg`;
 }
-
-// GOES satellite bands
-export const SAT_BANDS = {
-  truecolor: { label: 'True Color', id: 'geocolor' },
-  visible: { label: 'Visible', id: '02' },
-  watervapor: { label: 'Water Vapor', id: '08' },
-  infrared: { label: 'Infrared', id: '13' },
-  airmass: { label: 'Airmass RGB', id: 'airmass' },
-  sandwich: { label: 'Sandwich', id: 'sandwich' },
-};
-
-export function getSatelliteImageUrl(scale = 'goes16', sector = 'conus', band = 'geocolor', count = 1) {
-  return `${BASE}/data/sat/${scale}/${sector}/${band}/${count}.jpg`;
-}
-
-export const SAT_SECTORS = {
-  conus: 'CONUS',
-  ne: 'Northeast',
-  se: 'Southeast',
-  mw: 'Midwest',
-  sp: 'S. Plains',
-  nw: 'Northwest',
-  sw: 'Southwest',
-  full: 'Full Disk',
-};

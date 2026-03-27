@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Map, FileText, CloudRain, Snowflake, AlertTriangle } from 'lucide-react';
+import { Map, FileText, CloudRain, Snowflake, AlertTriangle, RefreshCw } from 'lucide-react';
 import { SURFACE_ANALYSIS, QPF_PRODUCTS, NATIONAL_FORECAST, ERO, WINTER_PRODUCTS, DISCUSSIONS, fetchDiscussion } from '../services/noaaWpcApi';
 
 const ANALYSIS_TABS = [
@@ -27,6 +27,7 @@ export default function SurfaceAnalysis() {
   const [discType, setDiscType] = useState('pmdspd');
   const [discussion, setDiscussion] = useState('');
   const [loadingDisc, setLoadingDisc] = useState(false);
+  const [imgKey, setImgKey] = useState(Date.now());
 
   useEffect(() => {
     if (tab !== 'discussion') return;
@@ -66,16 +67,22 @@ export default function SurfaceAnalysis() {
             </button>
           );
         })}
+        <button onClick={() => setImgKey(Date.now())}
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 transition-all ml-auto flex items-center gap-1">
+          <RefreshCw size={11} /> Refresh
+        </button>
       </div>
 
       {/* Surface Analysis */}
       {tab === 'surface' && (
         <div className="glass-panel overflow-hidden">
           <img
-            src={SURFACE_ANALYSIS.current}
+            key={`sfc-${imgKey}`}
+            src={`${SURFACE_ANALYSIS.current}?t=${imgKey}`}
             alt="Current Surface Analysis"
-            className="w-full h-auto"
-            onError={(e) => { e.target.style.opacity = '0.3'; }}
+            className="w-full h-auto bg-slate-800"
+            style={{ minHeight: 300 }}
+            onError={(e) => { e.target.style.opacity = '0.3'; e.target.alt = 'Surface analysis image unavailable -- try refreshing'; }}
           />
         </div>
       )}
@@ -96,9 +103,11 @@ export default function SurfaceAnalysis() {
           </div>
           <div className="glass-panel overflow-hidden">
             <img
-              src={QPF_PRODUCTS[qpfSel]}
+              key={`qpf-${qpfSel}-${imgKey}`}
+              src={`${QPF_PRODUCTS[qpfSel]}?t=${imgKey}`}
               alt={`QPF - ${QPF_LABELS[qpfSel]}`}
-              className="w-full h-auto"
+              className="w-full h-auto bg-slate-800"
+              style={{ minHeight: 300 }}
               onError={(e) => { e.target.style.opacity = '0.3'; }}
             />
           </div>
@@ -121,9 +130,11 @@ export default function SurfaceAnalysis() {
           </div>
           <div className="glass-panel overflow-hidden">
             <img
-              src={NATIONAL_FORECAST[natDay]}
+              key={`nat-${natDay}-${imgKey}`}
+              src={`${NATIONAL_FORECAST[natDay]}?t=${imgKey}`}
               alt={`National Forecast ${natDay}`}
-              className="w-full h-auto"
+              className="w-full h-auto bg-slate-800"
+              style={{ minHeight: 300 }}
               onError={(e) => { e.target.style.opacity = '0.3'; }}
             />
           </div>
@@ -146,9 +157,11 @@ export default function SurfaceAnalysis() {
           </div>
           <div className="glass-panel overflow-hidden">
             <img
-              src={ERO[eroDay]}
+              key={`ero-${eroDay}-${imgKey}`}
+              src={`${ERO[eroDay]}?t=${imgKey}`}
               alt={`ERO ${eroDay}`}
-              className="w-full h-auto"
+              className="w-full h-auto bg-slate-800"
+              style={{ minHeight: 300 }}
               onError={(e) => { e.target.style.opacity = '0.3'; }}
             />
           </div>
@@ -163,14 +176,14 @@ export default function SurfaceAnalysis() {
               <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
                 Winter Storm Severity Index (WSSI)
               </div>
-              <img src={WINTER_PRODUCTS.wssi} alt="WSSI" className="w-full h-auto"
+              <img key={`wssi-${imgKey}`} src={`${WINTER_PRODUCTS.wssi}?t=${imgKey}`} alt="WSSI" className="w-full h-auto bg-slate-800"
                 onError={(e) => { e.target.style.opacity = '0.3'; }} />
             </div>
             <div className="glass-panel overflow-hidden">
               <div className="px-3 py-2 border-b border-slate-700/30 text-xs font-medium text-slate-400">
                 Snow Probability (24h)
               </div>
-              <img src={WINTER_PRODUCTS.prob_snow_24} alt="Snow Probability" className="w-full h-auto"
+              <img key={`snow24-${imgKey}`} src={`${WINTER_PRODUCTS.prob_snow_24}?t=${imgKey}`} alt="Snow Probability" className="w-full h-auto bg-slate-800"
                 onError={(e) => { e.target.style.opacity = '0.3'; }} />
             </div>
           </div>
