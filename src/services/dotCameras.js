@@ -141,6 +141,7 @@ const ME_DOT = {
 };
 
 import { DOT_SOURCES_EXTRA } from './dotCamerasWest';
+import { DOT_SOURCES_NW } from './dotCamerasNorthwest';
 
 export const DOT_SOURCES = {
   // Northeast
@@ -152,6 +153,8 @@ export const DOT_SOURCES = {
   ME: ME_DOT,
   // Southeast, Midwest, West (from dotCamerasWest.js)
   ...DOT_SOURCES_EXTRA,
+  // Northwest - Oregon TripCheck + Washington WSDOT
+  ...DOT_SOURCES_NW,
 };
 
 // Note: NJ, MA, RI, DE DOT APIs are either blocked by firewalls (NJ),

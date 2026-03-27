@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import { Camera, Maximize2, Minimize2, MapPin, Train, Radio, Waves, Video, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Camera, Maximize2, Minimize2, MapPin, Train, Radio, Waves, Video, RefreshCw, Plane, Anchor, Loader2, AlertTriangle } from 'lucide-react';
 import { DOT_SOURCES } from '../services/dotCameras';
+import { fetchFaaSites, fetchCameraImage, STATE_NAMES } from '../services/faaWeatherCams';
+import { BUOY_STATIONS, BUOY_REGIONS, buildBuoyImageUrl } from '../services/noaaBuoyCams';
 
 // ── YouTube Live streams ──────────────────────────────────────────────
 const YT_CAMERAS = [
@@ -43,10 +45,11 @@ const YT_CAMERAS = [
 
 const YT_REGIONS = ['All', ...new Set(YT_CAMERAS.map(c => c.region))];
 const TYPE_ICONS = { rail: Train, traffic: Camera, harbor: Waves, news: Radio };
-const TABS = ['Live Streams', 'DOT Traffic Cams'];
+const TABS = ['Live Streams', 'DOT Traffic Cams', 'FAA Weather Cams', 'NOAA Marine Cams'];
+const TAB_ICONS = { 'Live Streams': Video, 'DOT Traffic Cams': Camera, 'FAA Weather Cams': Plane, 'NOAA Marine Cams': Anchor };
 const DOT_KEYS = Object.keys(DOT_SOURCES);
-
 const totalDotCams = DOT_KEYS.reduce((sum, k) => sum + DOT_SOURCES[k].cameras.length, 0);
+const BUOY_REGION_KEYS = Object.keys(BUOY_REGIONS);
 
 function TypeBadge({ type }) {
   if (!type || type === 'city' || type === 'beach' || type === 'weather' || type === 'airport') return null;
@@ -60,12 +63,10 @@ function TypeBadge({ type }) {
 
 function DotCamImage({ src, label }) {
   const [tick, setTick] = useState(0);
-
   useEffect(() => {
     const iv = setInterval(() => setTick(t => t + 1), 8000);
     return () => clearInterval(iv);
   }, []);
-
   return (
     <img
       src={`${src}${src.includes('?') ? '&' : '?'}t=${tick}`}
@@ -77,12 +78,135 @@ function DotCamImage({ src, label }) {
   );
 }
 
+// ── FAA Camera Card (loads image on mount) ──
+function FaaCamCard({ site, onExpand }) {
+  const [imgUrl, setImgUrl] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const camId = site.cameras[0]?.cameraId;
+
+  useEffect(() => {
+    if (!camId) { setLoading(false); setError(true); return; }
+    let cancelled = false;
+    fetchCameraImage(camId).then(url => {
+      if (cancelled) return;
+      if (url) setImgUrl(url);
+      else setError(true);
+      setLoading(false);
+    }).catch(() => { if (!cancelled) { setError(true); setLoading(false); } });
+    return () => { cancelled = true; };
+  }, [camId]);
+
+  return (
+    <div
+      className="glass-panel overflow-hidden group cursor-pointer hover:border-red-500/30 transition-all"
+      onClick={() => imgUrl && onExpand(site, imgUrl)}
+    >
+      <div className="relative bg-neutral-900" style={{ height: 170 }}>
+        {loading && (
+          <div className="w-full h-full flex items-center justify-center">
+            <Loader2 size={20} className="text-neutral-500 animate-spin" />
+          </div>
+        )}
+        {error && !loading && (
+          <div className="w-full h-full flex items-center justify-center text-neutral-600">
+            <AlertTriangle size={20} />
+          </div>
+        )}
+        {imgUrl && (
+          <img src={imgUrl} alt={site.siteName} className="w-full h-full object-cover" loading="lazy"
+            onError={(e) => { e.target.style.opacity = '0.3'; }} />
+        )}
+        <button
+          className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white/80
+            opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
+          title="Expand"
+        >
+          <Maximize2 size={14} />
+        </button>
+        <span className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-black/60 text-amber-300">
+          {site.icao || site.state}
+        </span>
+      </div>
+      <div className="px-3 py-2 flex items-center gap-2">
+        <Plane size={11} className="text-amber-400 shrink-0" />
+        <span className="text-xs font-medium text-neutral-300 truncate">{site.siteName}</span>
+        <span className="text-[10px] text-neutral-500 ml-auto shrink-0">{site.siteArea}</span>
+      </div>
+    </div>
+  );
+}
+
+// ── NOAA Buoy Camera Card ──
+function BuoyCamCard({ buoy, onExpand }) {
+  const [imgUrl, setImgUrl] = useState(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    // Try current hour, then -1h, -2h, -3h
+    let cancelled = false;
+    const tryLoad = (hoursAgo) => {
+      if (hoursAgo > 3 || cancelled) { setError(true); return; }
+      const url = buildBuoyImageUrl(buoy.imgCode, hoursAgo);
+      const img = new Image();
+      img.onload = () => { if (!cancelled) setImgUrl(url); };
+      img.onerror = () => tryLoad(hoursAgo + 1);
+      img.src = url;
+    };
+    tryLoad(0);
+    return () => { cancelled = true; };
+  }, [buoy.imgCode]);
+
+  return (
+    <div
+      className="glass-panel overflow-hidden group cursor-pointer hover:border-red-500/30 transition-all"
+      onClick={() => imgUrl && onExpand(buoy, imgUrl)}
+    >
+      <div className="relative bg-neutral-900" style={{ height: 100 }}>
+        {!imgUrl && !error && (
+          <div className="w-full h-full flex items-center justify-center">
+            <Loader2 size={16} className="text-neutral-500 animate-spin" />
+          </div>
+        )}
+        {error && (
+          <div className="w-full h-full flex flex-col items-center justify-center text-neutral-600 gap-1">
+            <Anchor size={16} />
+            <span className="text-[10px]">No image</span>
+          </div>
+        )}
+        {imgUrl && (
+          <img src={imgUrl} alt={buoy.name} className="w-full h-full object-cover" loading="lazy"
+            onError={(e) => { e.target.style.opacity = '0.3'; }} />
+        )}
+        <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-black/60 text-cyan-300">
+          {buoy.id}
+        </span>
+      </div>
+      <div className="px-2 py-1.5">
+        <div className="flex items-center gap-1.5">
+          <Anchor size={10} className="text-cyan-400 shrink-0" />
+          <span className="text-[11px] font-medium text-neutral-300 truncate">{buoy.name}</span>
+        </div>
+        <p className="text-[10px] text-neutral-500 truncate mt-0.5">{buoy.location}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function Cameras() {
   const [tab, setTab] = useState('Live Streams');
   const [expanded, setExpanded] = useState(null);
   const [expandedType, setExpandedType] = useState(null);
+  const [expandedData, setExpandedData] = useState(null);
   const [ytRegion, setYtRegion] = useState('All');
   const [dotFilter, setDotFilter] = useState('All');
+  // FAA state
+  const [faaSites, setFaaSites] = useState(null);
+  const [faaLoading, setFaaLoading] = useState(false);
+  const [faaError, setFaaError] = useState(null);
+  const [faaStateFilter, setFaaStateFilter] = useState('All');
+  // NOAA state
+  const [buoyRegion, setBuoyRegion] = useState('All');
 
   const ytFiltered = ytRegion === 'All' ? YT_CAMERAS : YT_CAMERAS.filter(c => c.region === ytRegion);
 
@@ -93,25 +217,67 @@ export default function Cameras() {
     ? allDotCams
     : allDotCams.filter(c => c.sourceKey === dotFilter);
 
+  // Load FAA sites when tab is selected
+  useEffect(() => {
+    if (tab !== 'FAA Weather Cams' || faaSites) return;
+    setFaaLoading(true);
+    fetchFaaSites()
+      .then(data => { setFaaSites(data); setFaaLoading(false); })
+      .catch(err => { setFaaError(err.message); setFaaLoading(false); });
+  }, [tab, faaSites]);
+
+  const faaStateKeys = faaSites ? Object.keys(faaSites).sort() : [];
+  const faaFiltered = faaSites
+    ? (faaStateFilter === 'All'
+        ? faaStateKeys.flatMap(k => faaSites[k])
+        : faaSites[faaStateFilter] || [])
+    : [];
+  const totalFaaCams = faaSites
+    ? faaStateKeys.reduce((sum, k) => sum + faaSites[k].length, 0)
+    : 0;
+
+  // NOAA filtered
+  const buoyFiltered = buoyRegion === 'All'
+    ? BUOY_STATIONS
+    : BUOY_STATIONS.filter(b => b.region === buoyRegion);
+
   // ── Expanded view ──
   if (expanded) {
     const isYt = expandedType === 'yt';
-    const cam = isYt
-      ? YT_CAMERAS.find(c => c.id === expanded)
-      : allDotCams.find(c => c.id === expanded);
+    const isDot = expandedType === 'dot';
+    const isFaa = expandedType === 'faa';
+    const isBuoy = expandedType === 'buoy';
+
+    let cam = null;
+    let label = '';
+    let subtitle = '';
+
+    if (isYt) {
+      cam = YT_CAMERAS.find(c => c.id === expanded);
+      label = cam?.label;
+      subtitle = cam?.city;
+    } else if (isDot) {
+      cam = allDotCams.find(c => c.id === expanded);
+      label = cam?.label;
+      subtitle = cam?.sourceLabel;
+    } else if (isFaa) {
+      label = expandedData?.siteName;
+      subtitle = expandedData?.siteArea;
+    } else if (isBuoy) {
+      label = expandedData?.name;
+      subtitle = expandedData?.location;
+    }
 
     return (
       <div className="animate-slide-up">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Camera size={16} className="text-purple-400" />
-            <span className="text-sm font-medium text-neutral-200">{cam?.label}</span>
-            <span className="text-xs text-neutral-500">
-              {isYt ? cam?.city : cam?.sourceLabel}
-            </span>
+            <span className="text-sm font-medium text-neutral-200">{label}</span>
+            <span className="text-xs text-neutral-500">{subtitle}</span>
           </div>
           <button
-            onClick={() => { setExpanded(null); setExpandedType(null); }}
+            onClick={() => { setExpanded(null); setExpandedType(null); setExpandedData(null); }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
               bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50 transition-all"
           >
@@ -119,22 +285,34 @@ export default function Cameras() {
           </button>
         </div>
         <div className="rounded-2xl overflow-hidden border border-neutral-700/50"
-          style={{ height: 'calc(100vh - 210px)', minHeight: 450 }}>
+          style={{ height: isBuoy ? 'auto' : 'calc(100vh - 210px)', minHeight: isBuoy ? 200 : 450 }}>
           {isYt ? (
             <iframe
               src={`https://www.youtube.com/embed/${expanded}?autoplay=1&mute=1&rel=0`}
               className="w-full h-full border-0"
-              title={cam?.label || 'Live Camera'}
+              title={label || 'Live Camera'}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
-          ) : (
-            <DotCamImage src={cam?.imageUrl || ''} label={cam?.label || 'DOT Camera'} />
-          )}
+          ) : isDot ? (
+            <DotCamImage src={cam?.imageUrl || ''} label={label || 'DOT Camera'} />
+          ) : (isFaa || isBuoy) && expandedData?.imgUrl ? (
+            <img src={expandedData.imgUrl} alt={label} className="w-full h-auto max-h-full object-contain bg-neutral-900 mx-auto" />
+          ) : null}
         </div>
-        {!isYt && (
+        {isDot && (
           <p className="text-[11px] text-neutral-500 mt-2 text-center flex items-center justify-center gap-1">
             <RefreshCw size={10} /> Image refreshes every 8 seconds
+          </p>
+        )}
+        {isFaa && (
+          <p className="text-[11px] text-neutral-500 mt-2 text-center">
+            FAA Aviation Weather Camera -- updates every ~5 minutes
+          </p>
+        )}
+        {isBuoy && (
+          <p className="text-[11px] text-neutral-500 mt-2 text-center">
+            NOAA NDBC BuoyCAM panoramic -- updates ~hourly during daylight
           </p>
         )}
       </div>
@@ -151,26 +329,30 @@ export default function Cameras() {
         <div>
           <h3 className="text-lg font-semibold text-neutral-200">Live Cameras</h3>
           <p className="text-sm text-neutral-500">
-            {YT_CAMERAS.length} live streams + {totalDotCams} DOT cams across {DOT_KEYS.length} states
+            {YT_CAMERAS.length} live streams + {totalDotCams} DOT + FAA aviation + NOAA marine cams
           </p>
         </div>
       </div>
 
       {/* Tab switcher */}
-      <div className="flex items-center gap-2 border-b border-neutral-700/50 pb-2">
-        {TABS.map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
-              ${tab === t
-                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-lg shadow-purple-500/5'
-                : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200 hover:bg-neutral-700/40'}`}
-          >
-            {t === 'Live Streams' ? <Video size={14} /> : <Camera size={14} />}
-            {t}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 border-b border-neutral-700/50 pb-2 overflow-x-auto scrollbar-none">
+        {TABS.map(t => {
+          const Icon = TAB_ICONS[t];
+          return (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap
+                ${tab === t
+                  ? 'bg-red-500/20 text-red-300 border border-red-500/40 shadow-lg shadow-red-500/5'
+                  : 'bg-neutral-800/40 text-neutral-400 border border-neutral-700/30 hover:text-neutral-200 hover:bg-neutral-700/40'}`}
+            >
+              <Icon size={14} />
+              <span className="hidden sm:inline">{t}</span>
+              <span className="sm:hidden">{t.split(' ')[0]}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* ── YOUTUBE TAB ── */}
@@ -236,7 +418,6 @@ export default function Cameras() {
       {/* ── DOT TRAFFIC CAMS TAB ── */}
       {tab === 'DOT Traffic Cams' && (
         <>
-          {/* State filter */}
           <div className="flex items-center gap-1.5 flex-wrap">
             <button
               onClick={() => setDotFilter('All')}
@@ -265,12 +446,12 @@ export default function Cameras() {
           <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-2">
             <RefreshCw size={14} className="text-red-400 shrink-0" />
             <span className="text-xs text-red-300">
-              {totalDotCams} DOT cameras across {DOT_KEYS.length} states. Auto-refresh every 8s. Some state DOT APIs are restricted.
+              {totalDotCams} DOT cameras across {DOT_KEYS.length} states. Auto-refresh every 8s.
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-            {dotFiltered.map((cam, idx) => (
+            {dotFiltered.map(cam => (
               <div
                 key={cam.id}
                 className="glass-panel overflow-hidden group cursor-pointer hover:border-red-500/30 transition-all"
@@ -302,6 +483,148 @@ export default function Cameras() {
 
           <p className="text-[11px] text-neutral-600 text-center">
             Feeds from state DOT traffic monitoring systems -- public camera data
+          </p>
+        </>
+      )}
+
+      {/* ── FAA WEATHER CAMS TAB ── */}
+      {tab === 'FAA Weather Cams' && (
+        <>
+          {faaLoading && (
+            <div className="flex items-center justify-center py-16 gap-3">
+              <Loader2 size={20} className="text-amber-400 animate-spin" />
+              <span className="text-sm text-neutral-400">Loading FAA Weather Camera sites...</span>
+            </div>
+          )}
+
+          {faaError && (
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-center">
+              <AlertTriangle size={20} className="text-red-400 mx-auto mb-2" />
+              <p className="text-sm text-red-300">Failed to load FAA cameras: {faaError}</p>
+              <button
+                onClick={() => { setFaaSites(null); setFaaError(null); }}
+                className="mt-2 px-3 py-1 rounded-lg text-xs bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {faaSites && (
+            <>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <button
+                  onClick={() => setFaaStateFilter('All')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                    ${faaStateFilter === 'All'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                      : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
+                >
+                  All States <span className="ml-1 text-[10px] opacity-60">({totalFaaCams})</span>
+                </button>
+                {faaStateKeys.map(k => (
+                  <button
+                    key={k}
+                    onClick={() => setFaaStateFilter(k)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                      ${faaStateFilter === k
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                        : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
+                  >
+                    {k}
+                    <span className="ml-1 text-[10px] opacity-60">({faaSites[k].length})</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
+                <Plane size={14} className="text-amber-400 shrink-0" />
+                <span className="text-xs text-amber-300">
+                  {totalFaaCams} FAA aviation weather camera sites across {faaStateKeys.length} states. Images update every ~5 min.
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+                {faaFiltered.slice(0, 40).map(site => (
+                  <FaaCamCard
+                    key={site.siteId}
+                    site={site}
+                    onExpand={(s, url) => {
+                      setExpanded(s.siteId);
+                      setExpandedType('faa');
+                      setExpandedData({ ...s, imgUrl: url });
+                    }}
+                  />
+                ))}
+              </div>
+
+              {faaFiltered.length > 40 && (
+                <p className="text-[11px] text-neutral-500 text-center">
+                  Showing 40 of {faaFiltered.length} sites. Filter by state to see more.
+                </p>
+              )}
+
+              <p className="text-[11px] text-neutral-600 text-center">
+                Data from FAA Aviation Weather Camera Program (weathercams.faa.gov)
+              </p>
+            </>
+          )}
+        </>
+      )}
+
+      {/* ── NOAA MARINE CAMS TAB ── */}
+      {tab === 'NOAA Marine Cams' && (
+        <>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              onClick={() => setBuoyRegion('All')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                ${buoyRegion === 'All'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                  : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
+            >
+              All Regions <span className="ml-1 text-[10px] opacity-60">({BUOY_STATIONS.length})</span>
+            </button>
+            {BUOY_REGION_KEYS.map(r => (
+              <button
+                key={r}
+                onClick={() => setBuoyRegion(r)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                  ${buoyRegion === r
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200 hover:bg-neutral-700/50'}`}
+              >
+                {r}
+                <span className="ml-1 text-[10px] opacity-60">
+                  ({BUOY_REGIONS[r].length})
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center gap-2">
+            <Anchor size={14} className="text-cyan-400 shrink-0" />
+            <span className="text-xs text-cyan-300">
+              {BUOY_STATIONS.length} NOAA NDBC buoy cameras. Panoramic ocean views, updated ~hourly during daylight.
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+            {buoyFiltered.map(buoy => (
+              <BuoyCamCard
+                key={buoy.id}
+                buoy={buoy}
+                onExpand={(b, url) => {
+                  setExpanded(b.id);
+                  setExpandedType('buoy');
+                  setExpandedData({ ...b, imgUrl: url });
+                }}
+              />
+            ))}
+          </div>
+
+          <p className="text-[11px] text-neutral-600 text-center">
+            Data from NOAA National Data Buoy Center (ndbc.noaa.gov) -- panoramic ocean horizon imagery
           </p>
         </>
       )}
