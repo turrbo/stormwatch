@@ -19,19 +19,17 @@ export const NATIONAL_FORECAST = {
   day3: `${BASE}/noaa/noaad3.gif`,
 };
 
-// ERO: no static images available -- use KMZ overlay text descriptions
 export const ERO = {
-  day1: `${BASE}/wwd/wssi/.gis/ero/Day_1_Excessive_Rainfall_Outlook.kmz`,
-  day2: `${BASE}/wwd/wssi/.gis/ero/Day_2_Excessive_Rainfall_Outlook.kmz`,
-  day3: `${BASE}/wwd/wssi/.gis/ero/Day_3_Excessive_Rainfall_Outlook.kmz`,
+  day1: `${BASE}/qpf/94ewbg.gif`,
+  day2: `${BASE}/qpf/98ewbg.gif`,
+  day3: `${BASE}/qpf/99ewbg.gif`,
 };
 
 export const WINTER_PRODUCTS = {
-  wssi_d1: `${BASE}/wwd/wssi/.gis/WSSI_Total_d1_png_solo.png`,
-  wssi_d2: `${BASE}/wwd/wssi/.gis/WSSI_Total_d2_png_solo.png`,
-  wssi_d3: `${BASE}/wwd/wssi/.gis/WSSI_Total_d3_png_solo.png`,
-  snow_amount: `${BASE}/wwd/wssi/.gis/Snow_Amount_ESRI.png`,
-  composite_d1: `${BASE}/wwd/day1_composite_conus.gif`,
+  wssi_overall: `${BASE}/wwd/wssi/images/web_CONUS_WSSI_Maximum_Overall.png`,
+  wssi_snow: `${BASE}/wwd/wssi/images/web_CONUS_WSSI_Maximum_Snow_Amount.png`,
+  wssi_ice: `${BASE}/wwd/wssi/images/web_CONUS_WSSI_Maximum_Ice_Accumulation.png`,
+  wssi_blowing: `${BASE}/wwd/wssi/images/web_CONUS_WSSI_Maximum_Blowing_Snow.png`,
 };
 
 export const DISCUSSIONS = {
