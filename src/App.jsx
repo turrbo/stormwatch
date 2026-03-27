@@ -9,6 +9,17 @@ import DailyForecast from './components/DailyForecast';
 import AlertsPanel from './components/AlertsPanel';
 import AirQuality from './components/AirQuality';
 import Cameras from './components/Cameras';
+import SatelliteView from './components/SatelliteView';
+import LightningMap from './components/LightningMap';
+import ModelsView from './components/ModelsView';
+import SurfaceAnalysis from './components/SurfaceAnalysis';
+import SnowReport from './components/SnowReport';
+import HistoricalWeather from './components/HistoricalWeather';
+import PWSNetwork from './components/PWSNetwork';
+import Meteograms from './components/Meteograms';
+import NWSDiscussion from './components/NWSDiscussion';
+import VentuskyMap from './components/VentuskyMap';
+import TropicalTracker from './components/TropicalTracker';
 import LoadingSpinner from './components/LoadingSpinner';
 import { AlertTriangle } from 'lucide-react';
 
@@ -55,16 +66,27 @@ export default function App() {
 
         {isLoading && !weather ? (
           <LoadingSpinner />
-        ) : weather ? (
+        ) : (
           <div className="animate-fade-in">
-            {activeTab === 'dashboard' && <Dashboard weather={weather} alerts={alerts} />}
+            {activeTab === 'dashboard' && weather && <Dashboard weather={weather} alerts={alerts} />}
             {activeTab === 'radar' && <RadarMap location={location} />}
-            {activeTab === 'forecast' && <DailyForecast weather={weather} />}
+            {activeTab === 'satellite' && <SatelliteView />}
+            {activeTab === 'lightning' && <LightningMap location={location} />}
+            {activeTab === 'models' && <ModelsView />}
+            {activeTab === 'surface' && <SurfaceAnalysis />}
+            {activeTab === 'ventusky' && <VentuskyMap location={location} />}
+            {activeTab === 'tropical' && <TropicalTracker />}
+            {activeTab === 'forecast' && weather && <DailyForecast weather={weather} />}
             {activeTab === 'alerts' && <AlertsPanel alerts={alerts} />}
             {activeTab === 'airquality' && <AirQuality airQuality={airQuality} weather={weather} />}
+            {activeTab === 'pws' && <PWSNetwork location={location} />}
+            {activeTab === 'meteograms' && <Meteograms location={location} />}
+            {activeTab === 'nws' && <NWSDiscussion location={location} />}
+            {activeTab === 'snow' && <SnowReport />}
+            {activeTab === 'historical' && <HistoricalWeather location={location} />}
             {activeTab === 'cameras' && <Cameras location={location} />}
           </div>
-        ) : null}
+        )}
       </main>
     </div>
   );
