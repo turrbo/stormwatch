@@ -50,9 +50,16 @@ export default function Header({
   return (
     <header className="sticky top-0 z-50 glass-panel border-b border-slate-700/50 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center gap-3">
-        <div className="flex items-center gap-2 shrink-0">
-          <img src="./logo.png" alt="EOC" className="w-8 h-8 rounded-lg object-cover" />
-          <h1 className="text-lg font-semibold text-white hidden sm:block">EOC</h1>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <div className="w-[42px] h-[42px] rounded-md flex items-center justify-center"
+            style={{ backgroundColor: '#C8102E' }}>
+            <span className="text-white text-xl font-bold leading-none">E</span>
+          </div>
+          <div className="hidden sm:block">
+            <h1 className="text-white text-xl font-bold leading-none"
+              style={{ letterSpacing: '1.5px' }}>EOC</h1>
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Emergency Operation Center</p>
+          </div>
         </div>
 
         <div className="relative flex-1 max-w-md" ref={dropdownRef}>
