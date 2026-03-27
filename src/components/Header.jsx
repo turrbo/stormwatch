@@ -51,8 +51,8 @@ export default function Header({
     <header className="sticky top-0 z-50 glass-panel border-b border-slate-700/50 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center gap-3">
         <div className="flex items-center gap-2 shrink-0">
-          <img src="./logo.png" alt="The EOC" className="w-8 h-8 rounded-lg object-cover" />
-          <h1 className="text-lg font-semibold text-white hidden sm:block">The EOC</h1>
+          <img src="./logo.png" alt="EOC" className="w-8 h-8 rounded-lg object-cover" />
+          <h1 className="text-lg font-semibold text-white hidden sm:block">EOC</h1>
         </div>
 
         <div className="relative flex-1 max-w-md" ref={dropdownRef}>
