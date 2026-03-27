@@ -57,8 +57,8 @@ export default function NWSDiscussion({ location }) {
     <div className="space-y-4 animate-slide-up">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-          <Building2 size={20} className="text-blue-400" />
+        <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+          <Building2 size={20} className="text-red-400" />
         </div>
         <div>
           <h3 className="text-lg font-semibold text-slate-200">NWS Forecast Office</h3>
@@ -73,14 +73,14 @@ export default function NWSDiscussion({ location }) {
         <button onClick={() => setTab('discussion')}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
             ${tab === 'discussion'
-              ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+              ? 'bg-red-500/20 text-red-300 border border-red-500/40'
               : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200'}`}>
           <FileText size={14} /> Forecast Discussion
         </button>
         <button onClick={() => setTab('stations')}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
             ${tab === 'stations'
-              ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+              ? 'bg-red-500/20 text-red-300 border border-red-500/40'
               : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:text-slate-200'}`}>
           <Radio size={14} /> ASOS/AWOS Stations
         </button>
@@ -88,7 +88,7 @@ export default function NWSDiscussion({ location }) {
 
       {loading ? (
         <div className="glass-panel p-8 text-center">
-          <Building2 size={32} className="text-blue-400/50 mx-auto mb-2 animate-pulse" />
+          <Building2 size={32} className="text-red-400/50 mx-auto mb-2 animate-pulse" />
           <p className="text-sm text-slate-500">Fetching NWS data...</p>
         </div>
       ) : (
@@ -113,14 +113,14 @@ export default function NWSDiscussion({ location }) {
                 const obs = stationObs[s.id];
                 return (
                   <div key={s.id}
-                    className="glass-panel p-4 cursor-pointer hover:border-blue-500/30 transition-all"
+                    className="glass-panel p-4 cursor-pointer hover:border-red-500/30 transition-all"
                     onClick={() => loadObs(s.id)}>
                     <div className="flex items-center justify-between mb-2">
                       <div>
                         <span className="text-sm font-semibold text-slate-200">{s.id}</span>
                         <p className="text-xs text-slate-500">{s.name}</p>
                       </div>
-                      <MapPin size={14} className="text-blue-400" />
+                      <MapPin size={14} className="text-red-400" />
                     </div>
                     {obs ? (
                       <div className="grid grid-cols-2 gap-2 mt-2">
@@ -130,7 +130,7 @@ export default function NWSDiscussion({ location }) {
                         </div>
                         <div className="text-xs">
                           <span className="text-slate-500">Dew: </span>
-                          <span className="text-blue-400 font-medium">{cToF(obs.dewpoint?.value)}°F</span>
+                          <span className="text-red-400 font-medium">{cToF(obs.dewpoint?.value)}°F</span>
                         </div>
                         <div className="text-xs">
                           <span className="text-slate-500">Wind: </span>

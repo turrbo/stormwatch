@@ -53,7 +53,7 @@ export default function Header({
         <div className="flex items-center gap-2.5 shrink-0">
           <div className="w-[42px] h-[42px] rounded-md flex items-center justify-center"
             style={{ backgroundColor: '#C8102E' }}>
-            <span className="text-white text-xl font-bold leading-none">E</span>
+            <span className="text-white text-[13px] font-bold leading-none tracking-tight">EOC</span>
           </div>
           <div>
             <h1 className="text-white text-lg sm:text-xl font-bold leading-none"
@@ -73,8 +73,8 @@ export default function Header({
               onFocus={() => { if (results.length) setShowResults(true); }}
               placeholder="Search city or state..."
               className="w-full bg-slate-800/80 border border-slate-600/50 rounded-xl pl-9 pr-8 py-2 text-sm
-                         text-slate-200 placeholder-slate-500 outline-none focus:border-blue-500/50 focus:ring-1
-                         focus:ring-blue-500/25 transition-all"
+                         text-slate-200 placeholder-slate-500 outline-none focus:border-red-500/50 focus:ring-1
+                         focus:ring-red-500/25 transition-all"
             />
             {query && (
               <button onClick={() => { setQuery(''); setResults([]); }}
@@ -102,7 +102,7 @@ export default function Header({
 
         <div className="flex items-center gap-1.5 shrink-0">
           <button onClick={onDetectLocation} title="Detect location"
-            className="p-2 rounded-lg hover:bg-slate-700/50 text-slate-400 hover:text-blue-400 transition-colors">
+            className="p-2 rounded-lg hover:bg-slate-700/50 text-slate-400 hover:text-red-400 transition-colors">
             <Navigation size={16} />
           </button>
 
@@ -121,7 +121,7 @@ export default function Header({
               className="p-2 rounded-lg hover:bg-slate-700/50 text-slate-400 hover:text-slate-200 transition-colors">
               <MapPin size={16} />
               {savedLocations.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-blue-500 rounded-full text-[10px]
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full text-[10px]
                   font-bold flex items-center justify-center text-white">{savedLocations.length}</span>
               )}
             </button>

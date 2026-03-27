@@ -38,7 +38,7 @@ export default function Navigation({ activeTab, onTabChange, alertCount = 0 }) {
               className={`flex items-center gap-1.5 px-3 py-3 text-xs font-medium whitespace-nowrap transition-all
                 border-b-2 relative
                 ${isActive
-                  ? 'text-blue-400 border-blue-400'
+                  ? 'text-red-400 border-red-400'
                   : 'text-slate-500 border-transparent hover:text-slate-300 hover:border-slate-600'}`}
             >
               <Icon size={14} />

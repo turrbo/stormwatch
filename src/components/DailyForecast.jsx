@@ -35,7 +35,7 @@ export default function DailyForecast({ weather }) {
                 </span>
                 <WeatherIcon name={info.icon} size={20} className="text-slate-300 shrink-0" />
                 {d.precipitation_probability_max[i] > 0 && (
-                  <span className="flex items-center gap-0.5 text-xs text-blue-400 w-10">
+                  <span className="flex items-center gap-0.5 text-xs text-red-400 w-10">
                     <Droplets size={10} />{d.precipitation_probability_max[i]}%
                   </span>
                 )}

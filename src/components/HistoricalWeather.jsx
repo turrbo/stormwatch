@@ -120,9 +120,9 @@ export default function HistoricalWeather({ location }) {
                   <div key={d.year} className="glass-panel-light p-3 text-center">
                     <div className="text-xs text-slate-500 mb-1">{d.year}</div>
                     <div className="text-sm font-semibold text-orange-400">{d.tempMax?.toFixed(0)}°</div>
-                    <div className="text-sm font-semibold text-blue-400">{d.tempMin?.toFixed(0)}°</div>
+                    <div className="text-sm font-semibold text-red-400">{d.tempMin?.toFixed(0)}°</div>
                     {d.precip > 0 && (
-                      <div className="text-[10px] text-blue-300 mt-0.5">{d.precip.toFixed(2)}" rain</div>
+                      <div className="text-[10px] text-red-300 mt-0.5">{d.precip.toFixed(2)}" rain</div>
                     )}
                     {d.snow > 0 && (
                       <div className="text-[10px] text-sky-300 mt-0.5">{d.snow.toFixed(1)}" snow</div>

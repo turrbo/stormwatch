@@ -121,7 +121,7 @@ function TropicalTidbitsView({ model, setModel, product, setProduct, region, set
           <button key={r} onClick={() => setRegion(r)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${region === r
-                ? 'bg-blue-500/25 text-blue-300 border border-blue-500/50'
+                ? 'bg-red-500/25 text-red-300 border border-red-500/50'
                 : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
             {REGIONS[r]}
           </button>
@@ -222,7 +222,7 @@ function PivotalWeatherView({ pvModel, setPvModel, pvProduct, setPvProduct, pvSe
           <button key={s} onClick={() => setPvSector(s)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${pvSector === s
-                ? 'bg-blue-500/25 text-blue-300 border border-blue-500/50'
+                ? 'bg-red-500/25 text-red-300 border border-red-500/50'
                 : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
             {PV_SECTORS[s]}
           </button>

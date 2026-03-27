@@ -242,7 +242,7 @@ export default function Cameras() {
               onClick={() => setDotFilter('All')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                 ${dotFilter === 'All'
-                  ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                  ? 'bg-red-500/20 text-red-300 border border-red-500/40'
                   : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
             >
               All States
@@ -253,7 +253,7 @@ export default function Cameras() {
                 onClick={() => setDotFilter(k)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${dotFilter === k
-                    ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                    ? 'bg-red-500/20 text-red-300 border border-red-500/40'
                     : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
               >
                 {DOT_SOURCES[k].label}
@@ -262,9 +262,9 @@ export default function Cameras() {
             ))}
           </div>
 
-          <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center gap-2">
-            <RefreshCw size={14} className="text-blue-400 shrink-0" />
-            <span className="text-xs text-blue-300">
+          <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-2">
+            <RefreshCw size={14} className="text-red-400 shrink-0" />
+            <span className="text-xs text-red-300">
               {totalDotCams} DOT cameras across {DOT_KEYS.length} states. Auto-refresh every 8s. Some state DOT APIs are restricted.
             </span>
           </div>
@@ -273,7 +273,7 @@ export default function Cameras() {
             {dotFiltered.map((cam, idx) => (
               <div
                 key={cam.id}
-                className="glass-panel overflow-hidden group cursor-pointer hover:border-blue-500/30 transition-all"
+                className="glass-panel overflow-hidden group cursor-pointer hover:border-red-500/30 transition-all"
                 onClick={() => { setExpanded(cam.id); setExpandedType('dot'); }}
               >
                 <div className="relative bg-slate-900" style={{ height: 170 }}>
@@ -285,12 +285,12 @@ export default function Cameras() {
                   >
                     <Maximize2 size={14} />
                   </button>
-                  <span className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-black/60 text-blue-300">
+                  <span className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-black/60 text-red-300">
                     {cam.sourceLabel}
                   </span>
                 </div>
                 <div className="px-3 py-2 flex items-center gap-2">
-                  <MapPin size={11} className="text-blue-400 shrink-0" />
+                  <MapPin size={11} className="text-red-400 shrink-0" />
                   <span className="text-xs font-medium text-slate-300 truncate">{cam.label}</span>
                   {cam.area && (
                     <span className="text-[10px] text-slate-500 ml-auto shrink-0">{cam.area}</span>

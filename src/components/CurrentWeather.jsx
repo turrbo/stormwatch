@@ -14,7 +14,7 @@ export default function CurrentWeather({ weather }) {
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
         <div className="flex flex-col items-center sm:items-start">
           <div className="flex items-center gap-3 mb-1">
-            <WeatherIcon name={info.icon} size={48} isDay={!!c.is_day} className="text-blue-400" />
+            <WeatherIcon name={info.icon} size={48} isDay={!!c.is_day} className="text-red-400" />
             <span className={`text-6xl font-light ${tempClass}`}>
               {formatTemp(c.temperature_2m)}
             </span>
@@ -26,7 +26,7 @@ export default function CurrentWeather({ weather }) {
           </p>
           <div className="flex gap-3 mt-2 text-sm text-slate-400">
             <span className="text-orange-400">H: {formatTemp(d.temperature_2m_max[0])}</span>
-            <span className="text-blue-400">L: {formatTemp(d.temperature_2m_min[0])}</span>
+            <span className="text-red-400">L: {formatTemp(d.temperature_2m_min[0])}</span>
           </div>
         </div>
 

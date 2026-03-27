@@ -37,7 +37,7 @@ export default function HourlyForecast({ weather }) {
               <WeatherIcon name={info.icon} size={20} isDay={!!h.isDay} className="text-slate-300" />
               <span className={`text-sm font-semibold ${tempClass}`}>{formatTemp(h.temp)}</span>
               {h.precip > 0 && (
-                <span className="flex items-center gap-0.5 text-[10px] text-blue-400">
+                <span className="flex items-center gap-0.5 text-[10px] text-red-400">
                   <Droplets size={8} />{h.precip}%
                 </span>
               )}

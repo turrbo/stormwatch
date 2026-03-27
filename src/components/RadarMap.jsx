@@ -34,7 +34,7 @@ export default function RadarMap({ location }) {
             onClick={() => switchLayer(l.id)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
               ${layer === l.id
-                ? 'bg-blue-500/25 text-blue-300 border border-blue-500/50 shadow-lg shadow-blue-500/10'
+                ? 'bg-red-500/25 text-red-300 border border-red-500/50 shadow-lg shadow-red-500/10'
                 : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200 hover:bg-slate-700/50'}`}
           >
             <l.icon size={13} />

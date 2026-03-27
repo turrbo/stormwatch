@@ -95,7 +95,7 @@ export default function SurfaceAnalysis() {
               <button key={k} onClick={() => setQpfSel(k)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${qpfSel === k
-                    ? 'bg-blue-500/25 text-blue-300 border border-blue-500/50'
+                    ? 'bg-red-500/25 text-red-300 border border-red-500/50'
                     : 'bg-slate-800/60 text-slate-400 border border-slate-700/40 hover:text-slate-200'}`}>
                 {v}
               </button>
