@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Map, FileText, CloudRain, Snowflake, AlertTriangle, RefreshCw } from 'lucide-react';
-import { SURFACE_ANALYSIS, QPF_PRODUCTS, NATIONAL_FORECAST, ERO, WINTER_PRODUCTS, DISCUSSIONS, fetchDiscussion } from '../services/noaaWpcApi';
+import { Map, FileText, CloudRain, Snowflake, AlertTriangle, RefreshCw, ExternalLink } from 'lucide-react';
+import { SURFACE_ANALYSIS, QPF_PRODUCTS, NATIONAL_FORECAST, WINTER_PRODUCTS, DISCUSSIONS, fetchDiscussion } from '../services/noaaWpcApi';
 
 const ANALYSIS_TABS = [
   { id: 'surface', label: 'Surface Analysis', icon: Map },
@@ -14,7 +14,6 @@ const ANALYSIS_TABS = [
 const QPF_LABELS = {
   day1_24h: 'Day 1 (24h)',
   day2_24h: 'Day 2 (24h)',
-  day3_24h: 'Day 3 (24h)',
   day5_accum: '5-Day Accum.',
   day7_accum: '7-Day Accum.',
 };
@@ -23,7 +22,6 @@ export default function SurfaceAnalysis() {
   const [tab, setTab] = useState('surface');
   const [qpfSel, setQpfSel] = useState('day1_24h');
   const [natDay, setNatDay] = useState('day1');
-  const [eroDay, setEroDay] = useState('day1');
   const [discType, setDiscType] = useState('pmdspd');
   const [discussion, setDiscussion] = useState('');
   const [loadingDisc, setLoadingDisc] = useState(false);
@@ -141,29 +139,30 @@ export default function SurfaceAnalysis() {
         </div>
       )}
 
-      {/* ERO */}
+      {/* ERO - Interactive map link (no static images available) */}
       {tab === 'ero' && (
         <div className="space-y-3">
-          <div className="flex items-center gap-1.5">
-            {['day1', 'day2', 'day3'].map(d => (
-              <button key={d} onClick={() => setEroDay(d)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all
-                  ${eroDay === d
-                    ? 'bg-orange-500/25 text-orange-300 border border-orange-500/50'
-                    : 'bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 hover:text-neutral-200'}`}>
-                {d.replace('day', 'Day ')}
-              </button>
-            ))}
-          </div>
-          <div className="glass-panel overflow-hidden">
-            <img
-              key={`ero-${eroDay}-${imgKey}`}
-              src={`${ERO[eroDay]}?t=${imgKey}`}
-              alt={`ERO ${eroDay}`}
-              className="w-full h-auto bg-neutral-800"
-              style={{ minHeight: 300 }}
-              onError={(e) => { e.target.style.opacity = '0.3'; }}
-            />
+          <div className="glass-panel p-6 text-center space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-orange-500/20 flex items-center justify-center mx-auto">
+              <AlertTriangle size={32} className="text-orange-400" />
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold text-neutral-200">Excessive Rainfall Outlook</h4>
+              <p className="text-sm text-neutral-400 mt-1">
+                ERO products are rendered as interactive GIS maps by NOAA WPC.
+                View the full interactive map on the WPC website.
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-3">
+              <a
+                href="https://www.wpc.ncep.noaa.gov/qpf/excessive_rainfall_outlook_ero.php"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 hover:bg-orange-500/30 transition-all text-sm font-medium"
+              >
+                <ExternalLink size={14} /> Open ERO Interactive Map
+              </a>
+            </div>
           </div>
         </div>
       )}
@@ -174,16 +173,30 @@ export default function SurfaceAnalysis() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="glass-panel overflow-hidden">
               <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
-                Winter Storm Severity Index (WSSI)
+                WSSI Overall -- Day 1
               </div>
-              <img key={`wssi-${imgKey}`} src={`${WINTER_PRODUCTS.wssi}?t=${imgKey}`} alt="WSSI" className="w-full h-auto bg-neutral-800"
+              <img key={`wssi1-${imgKey}`} src={`${WINTER_PRODUCTS.wssi_d1}?t=${imgKey}`} alt="WSSI Day 1" className="w-full h-auto bg-neutral-800"
                 onError={(e) => { e.target.style.opacity = '0.3'; }} />
             </div>
             <div className="glass-panel overflow-hidden">
               <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
-                Snow Probability (24h)
+                WSSI Overall -- Day 2
               </div>
-              <img key={`snow24-${imgKey}`} src={`${WINTER_PRODUCTS.prob_snow_24}?t=${imgKey}`} alt="Snow Probability" className="w-full h-auto bg-neutral-800"
+              <img key={`wssi2-${imgKey}`} src={`${WINTER_PRODUCTS.wssi_d2}?t=${imgKey}`} alt="WSSI Day 2" className="w-full h-auto bg-neutral-800"
+                onError={(e) => { e.target.style.opacity = '0.3'; }} />
+            </div>
+            <div className="glass-panel overflow-hidden">
+              <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
+                Snow Amount Forecast
+              </div>
+              <img key={`snow-${imgKey}`} src={`${WINTER_PRODUCTS.snow_amount}?t=${imgKey}`} alt="Snow Amount" className="w-full h-auto bg-neutral-800"
+                onError={(e) => { e.target.style.opacity = '0.3'; }} />
+            </div>
+            <div className="glass-panel overflow-hidden">
+              <div className="px-3 py-2 border-b border-neutral-700/30 text-xs font-medium text-neutral-400">
+                Day 1 Winter Composite
+              </div>
+              <img key={`comp-${imgKey}`} src={`${WINTER_PRODUCTS.composite_d1}?t=${imgKey}`} alt="Winter Composite" className="w-full h-auto bg-neutral-800"
                 onError={(e) => { e.target.style.opacity = '0.3'; }} />
             </div>
           </div>

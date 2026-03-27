@@ -7,33 +7,31 @@ export const SURFACE_ANALYSIS = {
 };
 
 export const QPF_PRODUCTS = {
-  day1_24h: `${BASE}/qpf/p24i.gif`,
-  day2_24h: `${BASE}/qpf/d24.gif`,
-  day3_24h: `${BASE}/qpf/d34.gif`,
-  day1_6h_1: `${BASE}/qpf/p06i.gif`,
-  day1_6h_2: `${BASE}/qpf/p12i.gif`,
-  day1_6h_3: `${BASE}/qpf/p18i.gif`,
-  day1_6h_4: `${BASE}/qpf/p24i.gif`,
+  day1_24h: `${BASE}/qpf/fill_94qwbg.gif`,
+  day2_24h: `${BASE}/qpf/fill_98qwbg.gif`,
   day5_accum: `${BASE}/qpf/p120i.gif`,
   day7_accum: `${BASE}/qpf/p168i.gif`,
 };
 
 export const NATIONAL_FORECAST = {
-  day1: `${BASE}/NationalForecastChart/staticimages/noaaforecast-day1.png`,
-  day2: `${BASE}/NationalForecastChart/staticimages/noaaforecast-day2.png`,
-  day3: `${BASE}/NationalForecastChart/staticimages/noaaforecast-day3.png`,
+  day1: `${BASE}/noaa/noaad1.gif`,
+  day2: `${BASE}/noaa/noaad2.gif`,
+  day3: `${BASE}/noaa/noaad3.gif`,
 };
 
+// ERO: no static images available -- use KMZ overlay text descriptions
 export const ERO = {
-  day1: `${BASE}/qpf/ero/ero_d1.gif`,
-  day2: `${BASE}/qpf/ero/ero_d2.gif`,
-  day3: `${BASE}/qpf/ero/ero_d3.gif`,
+  day1: `${BASE}/wwd/wssi/.gis/ero/Day_1_Excessive_Rainfall_Outlook.kmz`,
+  day2: `${BASE}/wwd/wssi/.gis/ero/Day_2_Excessive_Rainfall_Outlook.kmz`,
+  day3: `${BASE}/wwd/wssi/.gis/ero/Day_3_Excessive_Rainfall_Outlook.kmz`,
 };
 
 export const WINTER_PRODUCTS = {
-  wssi: `${BASE}/wwd/wssi/wssi_main_day1.png`,
-  prob_snow_24: `${BASE}/wwd/pwpf_d12/images/gifd2/PWPF_SNW24_D2.gif`,
-  prob_ice_24: `${BASE}/wwd/pwpf_d12/images/gifd2/PWPF_ICE24_D2.gif`,
+  wssi_d1: `${BASE}/wwd/wssi/.gis/WSSI_Total_d1_png_solo.png`,
+  wssi_d2: `${BASE}/wwd/wssi/.gis/WSSI_Total_d2_png_solo.png`,
+  wssi_d3: `${BASE}/wwd/wssi/.gis/WSSI_Total_d3_png_solo.png`,
+  snow_amount: `${BASE}/wwd/wssi/.gis/Snow_Amount_ESRI.png`,
+  composite_d1: `${BASE}/wwd/day1_composite_conus.gif`,
 };
 
 export const DISCUSSIONS = {
@@ -42,12 +40,45 @@ export const DISCUSSIONS = {
   qpf: 'pmdqpf',
 };
 
+// Use NWS API (has CORS) instead of WPC direct (no CORS)
 export async function fetchDiscussion(type = 'pmdspd') {
-  const res = await fetch(`${BASE}/discussions/hpcdiscussions.php?disc=${type}`);
-  if (!res.ok) throw new Error('WPC discussion fetch error');
-  const html = await res.text();
-  const match = html.match(/<pre[^>]*>([\s\S]*?)<\/pre>/);
-  return match ? match[1].trim() : 'Discussion unavailable.';
+  // Map WPC disc types to NWS product search terms
+  const typeMap = {
+    pmdspd: 'PMD',  // Short Range Prognostic Discussion
+    pmdepd: 'PMD',  // Extended Prognostic Discussion
+    pmdqpf: 'PMD',  // QPF Discussion
+  };
+  const productType = typeMap[type] || 'PMD';
+
+  try {
+    const res = await fetch(`https://api.weather.gov/products/types/${productType}`);
+    if (!res.ok) throw new Error('NWS API error');
+    const data = await res.json();
+    const products = data['@graph'] || [];
+
+    // Find the matching discussion by product code
+    const codeMap = { pmdspd: 'Short Range', pmdepd: 'Extended', pmdqpf: 'QPF' };
+    const searchTerm = codeMap[type] || '';
+
+    // Get the first product, or search for a matching one
+    let target = products[0];
+    if (searchTerm) {
+      const match = products.find(p =>
+        (p.productName || '').toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      if (match) target = match;
+    }
+
+    if (!target) return 'No discussion available.';
+
+    // Fetch the actual product text
+    const prodRes = await fetch(`https://api.weather.gov/products/${target.id}`);
+    if (!prodRes.ok) throw new Error('Product fetch error');
+    const prodData = await prodRes.json();
+    return prodData.productText || 'Discussion text unavailable.';
+  } catch {
+    return 'Failed to load discussion. NWS API may be temporarily unavailable.';
+  }
 }
 
 export async function fetchMPDs() {

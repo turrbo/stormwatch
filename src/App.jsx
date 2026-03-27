@@ -10,7 +10,7 @@ import AlertsPanel from './components/AlertsPanel';
 import AirQuality from './components/AirQuality';
 import Cameras from './components/Cameras';
 import SatelliteView from './components/SatelliteView';
-import LightningMap from './components/LightningMap';
+
 import ModelsView from './components/ModelsView';
 import SurfaceAnalysis from './components/SurfaceAnalysis';
 import SnowReport from './components/SnowReport';
@@ -71,7 +71,7 @@ export default function App() {
             {activeTab === 'dashboard' && weather && <Dashboard weather={weather} alerts={alerts} />}
             {activeTab === 'radar' && <RadarMap location={location} />}
             {activeTab === 'satellite' && <SatelliteView />}
-            {activeTab === 'lightning' && <LightningMap location={location} />}
+
             {activeTab === 'models' && <ModelsView />}
             {activeTab === 'surface' && <SurfaceAnalysis />}
 
